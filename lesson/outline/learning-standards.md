@@ -199,7 +199,7 @@ JavaScript, React, Unit Testing
 
 When using the React Testing Library (RTL) to determine if an element is NOT present in the rendered DOM, the `screen.queryBy*` variants should be used over their `screen.getBy*` counterparts.
 
-If the queried element produces a null set, the `screen.getBy*` variants will throw an error before the assertion can be made whereas the `screen.queryBy*` variants simply return `null`.
+If the queried element cannot be found, the `screen.getBy*` variants will throw an error causing the test to fail. `screen.queryBy*` will instead return `null`.
 
 In this example, using `screen.getByRole('foobar')` will result in an error and a failing test while using `screen.queryByRole('foobar')` will result in a passing test.
 
