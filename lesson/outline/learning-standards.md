@@ -231,7 +231,9 @@ JavaScript, React, Unit Testing
 
 When using the React Testing Library (RTL) to query the rendered DOM for an element that will appear as a result of an asynchronous action (for example, after some API fetch occurs), the `screen.findBy*` variants should be used instead of the `waitFor()` method and the `screen.getBy*` variants.
 
-In this example, a header with the test `'Goodbye'` will appear after a Promise resolves. While both approaches will accurately find this element, the approach that uses `screen.findByText()` is more concise and can produce better error messages in the event that the element is not found.
+In this example, a header with the text `'Goodbye'` will appear after a Promise resolves. While both approaches will accurately find this element, the approach that uses `screen.findByText()` is more concise and can produce better error messages in the event that the element is not found.
+
+When using the asynchronous `screen.findBy*` variants, the `async` keyword must be used with the test callback function.
 
 ```js
 it ('should find an async element', async () => { 
