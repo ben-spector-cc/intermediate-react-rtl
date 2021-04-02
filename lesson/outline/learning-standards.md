@@ -53,7 +53,7 @@ To manually install the RTL with `npm`, use the following command (though not re
 npm install --save-dev @testing-library/react
 ```
 
-Once installed, values from the RTL can be included in your project by importing them:
+Once installed, RTL can be imported into your project:
 
 ```js
 // app.test.js
