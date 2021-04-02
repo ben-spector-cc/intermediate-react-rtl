@@ -234,14 +234,17 @@ When using the React Testing Library (RTL) to query the rendered DOM for an elem
 In this example, a header with the test `'Goodbye'` will appear after a Promise resolves. While both approaches will accurately find this element, the approach that uses `screen.findByText()` is more concise and can produce better error messages in the event that the element is not found.
 
 ```js
-// Wait for an element with the test 'Goodbye' to appear before proceeding.
-const header = await waitFor(() =>
-  screen.getByText('Goodbye')
-)
+it ('should find an async element', async () => { 
+  // Wait for an element with the test 'Goodbye' to appear before proceeding.
+  const header = await waitFor(() =>
+    screen.getByText('Goodbye')
+  )
 
-// This does the same as above, but more succinctly and with better error logging
-const header = await screen.findByText('Goodbye');
-```
+  // This does the same as above, but more succinctly and with better error logging
+  const header = await screen.findByText('Goodbye');
+  
+  expect(header).toBeInTheDocument();
+});
 
 ### Tags
 
