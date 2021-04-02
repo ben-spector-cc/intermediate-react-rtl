@@ -165,7 +165,7 @@ JavaScript, React, Unit Testing
 
 ### Learning Standard Text
 
-The `@testing-library/user-event` library is an extension of the `@testing-library` that provides tools for simulating user interactions with the DOM. The provided `userEvent` object and the methods it contains can be used to simulate clicks, typing, and much more.
+The `@testing-library/user-event` library is an extension of `@testing-library` that provides tools for simulating user interactions with the DOM. The provided `userEvent` object and the methods it contains can be used to simulate clicks, typing, and much more.
 
 In this example, the `userEvent.type()` method is used to simulate a user typing the text `'Hello World!'` into the rendrered text box.
 
