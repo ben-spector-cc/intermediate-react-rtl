@@ -147,8 +147,6 @@ it('should render a header', () => {
 });
 ```
 
-The assertion matcher methods `expect('...').toBeInTheDocument()` and `expect('...').toHaveTextContent()` are from the `@testing-library/jest-dom` library. It is common for this library to be used alongside the React Testing Library.
-
 ### Tags
 
 JavaScript, React, Unit Testing
@@ -247,6 +245,7 @@ it ('should find an async element', async () => {
   
   expect(header).toBeInTheDocument();
 });
+```
 
 ### Tags
 
@@ -259,3 +258,45 @@ JavaScript, React, Unit Testing
 - https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#using-waitfor-to-wait-for-elements-that-can-be-queried-with-find
 
 <hr>
+
+## Jest Dom
+
+### Learning Standard Text
+
+The `@testing-library/jest-dom` package contains DOM-specific matcher methods for testing front-end applications with Jest. It is common for this library to be used alongside the React Testing Library.
+
+In this example, assertion matcher methods `expect('...').toBeInTheDocument()` and `expect('...').toHaveTextContent()` are being used alongside the React Testing Library to confirm the existence and contents of a header element.
+
+```js
+import { render, screen } from '@testing-library/react'
+import '@testing-library/jest-dom';
+
+import { App } from './App.js'
+/* App.js
+
+export const App = () => {
+  return (
+    <h1>Hello World</h1>
+  )
+}
+*/
+
+it('should render a header', () => {
+  render(<App />);
+  expect(screen.getByText("Hello World")).toBeInTheDocument();
+  expect(screen.getByRole("header")).toHaveTextContent("Hello World");
+});
+```
+
+### Tags
+
+JavaScript, React, Unit Testing, Jest
+
+### Additional Notes / Resources Used
+
+- 
+
+<hr>
+
+
+
