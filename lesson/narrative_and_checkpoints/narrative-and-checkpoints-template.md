@@ -1,38 +1,135 @@
-# _Lesson Title_
+# Testing Components with React Testing Library
 
 _Read the content standards for expectations for [narratives](http://curriculum-documentation.codecademy.com/Content-Standards/narrative/), [checkpoints](http://curriculum-documentation.codecademy.com/Content-Standards/checkpoint/), and [hints](http://curriculum-documentation.codecademy.com/Content-Standards/hint/)._ 
 
 <hr>
 
-## Exercise 1: _Insert exercise title here._
+## Exercise 1: What is React Testing Library
 
 ### Narrative:
 
-### Instructions:
+In this lesson, you will learn how to test your React components with the React Testing Library. Remember, we need to test our code so that we can be sure that any application we are building is working as expected. If we are building our UI using React, we can use RTL as a way to ensure that our react components are working correctly.
 
-1. Checkpoint: _Insert checkpoint text here._
+The main advantage of RTL over other testing frameworks is that it allows us to test our component in a way that mimic real user interactions. The logic behind this is that in actual production, a user will not care about the implementation details of a react component e.g. the component's state, the props passed to it, etc. The user will only care on whether or not they are able to use the app.
 
-Hint: _Insert optional but recommended hint text here._
+Take a moment to observe the UI in your browser's window. It displays a grocery list with the following items. 
 
-2. Checkpoint: _Insert checkpoint text here._
+- Apples
+- Milk
+- Cereal
 
-Hint: _Insert optional but recommended hint text here._
+You can click on the checkboxes to mark that you've added one of these items to your cart. Go to `GroceryList.js` and observe the code for this component.
+
+```js
+const GroceryList = ()=>{
+    return (
+    <div>
+        <h1>Grocery List</h1>
+        <ul>
+            <li>
+                <label htmlFor="item1">Apples</label>
+                <input type="checkbox" id="item1"/>
+            </li>
+            <li>
+                <label htmlFor="item2">Milk</label>
+                <input type="checkbox" id="item2"/>
+            </li>
+            <li>
+                <label htmlFor="item3">Cereal</label>
+                <input type="checkbox" id="item3"/>
+            </li>
+        </ul>
+    </div>
+    )
+}
+
+export default GroceryList
+```
+
+Go to the `test.js` file. It contains a unit test using the RTL library. Observe how it mimicks a user clicking the first checkbox.
+
+```js
+import { render, screen, cleanup } from '@testing-library/react';
+import GroceryList from './components/GroceryList';
+import userEvent from '@testing-library/user-event';
+
+test('should mark the first checkbox as checked', () => {
+  // simulates a user clicking the 'Apples' checkbox
+  render(<GroceryList />);
+  userEvent.click(screen.getByLabelText('Apples'));
+  expect(screen.getByLabelText('Apples')).toBeChecked();
+});
+```
+
+Can you see how we are able to test the `GroceryList` component without knowing any of its implementation details? This is what makes RTL so powerful. We can test our React components as if we are a real user without and not worry about the specific logic that went behind coding them.
 
 <hr>
 
-## Exercise 2: _Insert exercise title here._
+## Exercise 2: Setting up React Testing Library
 
 ### Narrative:
 
+In our upcoming lessons, we will use the components from {appName} web app to learn about RTL. Before we do that though, we must know how to set up RTL tests in our app.
+
+In order to use React Testing Library, we will need to include the `@testing-library/react` package in our project by using npm like so:
+
+```js
+npm install @testing-library/react
+```
+
+Once you have added `@testing-library/react` to your project, you can import the `render()` function:
+
+```js
+import { render } from '@testing-library/react
+```
+`render()` is a special function that takes in JSX as an argument. E.g.
+
+```js
+render(<h1>Hello World</h1>);
+```
+
+It makes our component available in the unit test. We can make sure that this is the case by using the `screen.debug()` function. It prints out all the DOM contents. E.g.
+
+```js
+  render(<h1>Hello World</h1>);
+  screen.debug()
+```
+will print out
+```HTML
+<body>
+  <div>
+    <h1>
+      Hello World
+    </h1>
+  </div>
+</body>
+```
+
+`screen` is a special object which can be thought of as a representation of the browser window. `screen` can be imported like so: 
+
+```js
+import { screen } from '@testing-library/react'`.
+```
 ### Instructions:
 
-1. Checkpoint: _Insert checkpoint text here._
+1. Checkpoint: Install @testing-library/react. To verify that you have successfully added the package to your project, navigate to package.json and check that `@testing-library/react` appears in the dependencies array.
 
-Hint: _Insert optional but recommended hint text here._
+Hint: Use npm install --save to add the package to your project.
 
-2. Checkpoint: _Insert checkpoint text here._
+2. Checkpoint: In test.js import `render()` and `screen` from @testing-library/react.
 
-Hint: _Insert optional but recommended hint text here._
+Hint: Your syntax should look something like this:
+```js
+import {componentName} from `name-of-package`
+```
+
+3. Checkpoint: Call the render function on the {componentName} component and then use screen.debug() to make sure the component is included in the unit test. What do you see?
+
+Hint: Your syntax should look something like this:
+```js
+ render(componentName)
+ screen.debug()
+```
 
 <hr>
 
