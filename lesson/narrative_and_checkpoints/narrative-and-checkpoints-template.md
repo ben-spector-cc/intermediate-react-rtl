@@ -52,16 +52,21 @@ Go to the `test.js` file. It contains a unit test using the RTL library. Observe
 import { render, screen, cleanup } from '@testing-library/react';
 import GroceryList from './components/GroceryList';
 import userEvent from '@testing-library/user-event';
-
 test('should mark the first checkbox as checked', () => {
-  // simulates a user clicking the 'Apples' checkbox
+  // render the grocery list
   render(<GroceryList />);
-  userEvent.click(screen.getByLabelText('Apples'));
-  expect(screen.getByLabelText('Apples')).toBeChecked();
+  // grab the apple item
+  const appleItem = screen.getByLabelText('Apples');
+  // simulate a "click" on the apple checkbox
+  userEvent.click(appleItem);
+  // assert that the apple checkbox was checked
+  expect(appleItem).toBeChecked();
 });
 ```
 
-Can you see how we are able to test the `GroceryList` component without knowing any of its implementation details? This is what makes RTL so powerful. We can test our React components as if we are a real user without and not worry about the specific logic that went behind coding them.
+Don't worry if you cannot understand every single line of the code snippet above. In the upcoming lessons, we will cover RTL so that you can understand everything that's going on.
+
+Can you see how we are able to test the `GroceryList` component without knowing any of its implementation details? This is what makes RTL so powerful. We can test our React components as if we are a real user and not worry about the specific logic that went behind coding them.
 
 <hr>
 
@@ -133,9 +138,18 @@ Hint: Your syntax should look something like this:
 
 <hr>
 
-## Exercise 3: _Insert exercise title here._
+## Exercise 3: Querying with RTL
 
 ### Narrative:
+
+Now that we know how to set up RTL, it is time for us to go through how to perform queries using the RTL libraries. Querying allows us to extract the different DOM nodes from our React component and test them individually. Fortunately for us RTL has many built in query methods that greatly simplifies this process for us. In this lesson, we will cover the `getBy...` query methods.
+
+To get a list of all the `getBy` methods go to the RTL docs. There are two ways of using these query methods. You can either extract them from the `render` function and apply them, or you can use the `screen` object `screen.getByText()`. We will focus on the `screen.getBy..` option for this lesson and the upcoming ones.
+
+Now that we know how to query DOM nodes, we can test them using jest assertions. Recall in the first exercise we saw an assertion like `expect.toBeChecked()`. This isn't part of the regular jest mathchers, but instead are extensions provided byt `blah blah` library. You can install this library using the command `npm install `. Once installed you can include it in your test.js file like so:
+```js
+```
+There are many different jest matchers. Instead of memorizing them all it is best to just follow the docs. Here is an example of the `expect.` matcher. Look up its documentation to see how its implemented.
 
 ### Instructions:
 
@@ -146,3 +160,30 @@ Hint: _Insert optional but recommended hint text here._
 2. Checkpoint: _Insert checkpoint text here._
 
 Hint: _Insert optional but recommended hint text here._
+
+<hr>
+
+## Exercise 4: Querying with RTL
+
+### Narrative:
+
+Now that we know how to set up RTL, it is time for us to go through how to perform queries using the RTL libraries. Querying allows us to extract the different DOM nodes from our React component and test them individually. Fortunately for us RTL has many built in query methods that greatly simplifies this process for us. In this lesson, we will cover the `getBy...` query methods.
+
+To get a list of all the `getBy` methods go to the RTL docs. There are two ways of using these query methods. You can either extract them from the `render` function and apply them, or you can use the `screen` object `screen.getByText()`. We will focus on the `screen.getBy..` option for this lesson and the upcoming ones.
+
+Now that we know how to query DOM nodes, we can test them using jest assertions. Recall in the first exercise we saw an assertion like `expect.toBeChecked()`. This isn't part of the regular jest mathchers, but instead are extensions provided byt `blah blah` library. You can install this library using the command `npm install `. Once installed you can include it in your test.js file like so:
+```js
+```
+There are many different jest matchers. Instead of memorizing them all it is best to just follow the docs. Here is an example of the `expect.` matcher. Look up its documentation to see how its implemented.
+
+### Instructions:
+
+1. Checkpoint: _Insert checkpoint text here._
+
+Hint: _Insert optional but recommended hint text here._
+
+2. Checkpoint: _Insert checkpoint text here._
+
+Hint: _Insert optional but recommended hint text here._
+
+<hr>
