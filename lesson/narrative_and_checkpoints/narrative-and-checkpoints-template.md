@@ -142,14 +142,53 @@ Hint: Your syntax should look something like this:
 
 ### Narrative:
 
-Now that we know how to set up RTL, it is time for us to go through how to perform queries using the RTL libraries. Querying allows us to extract the different DOM nodes from our React component and test them individually. Fortunately for us RTL has many built in query methods that greatly simplifies this process for us. In this lesson, we will cover the `getBy...` query methods.
+Now that we know how to set up RTL, we can finally start testing our React components. To do so, we first have to query and extract the DOM nodes from our components. Once that is done, we can check and see if the extracted DOM nodes have the correct content or are working as expected. Fortunately for us, RTL has many built in query methods that greatly simplifies this process. In this lesson, we will cover the `getBy...` query methods. 
 
-To get a list of all the `getBy` methods go to the RTL docs. There are two ways of using these query methods. You can either extract them from the `render` function and apply them, or you can use the `screen` object `screen.getByText()`. We will focus on the `screen.getBy..` option for this lesson and the upcoming ones.
+There are two ways of accessing the `getBy()` functions:
 
-Now that we know how to query DOM nodes, we can test them using jest assertions. Recall in the first exercise we saw an assertion like `expect.toBeChecked()`. This isn't part of the regular jest mathchers, but instead are extensions provided byt `blah blah` library. You can install this library using the command `npm install `. Once installed you can include it in your test.js file like so:
+- You can access them by applying destructuring on the `render()` function.
+
+```js
+  const {getByText, getByLabelText} = render(<App/>)
+  const node1 = getByText('Login Page')
+  const node2 = getByLabelText('Username')
+```
+
+- Or you can use the `screen` object to use them directly
+
+```js
+render(<App/>)
+const node1 = screen.getByText()
+const node2 = screen.getByLabelText()
+```
+
+We will focus on the `screen.getBy..` option for this lesson and the upcoming ones.
+
+Look at the example below, the `getByText()` method is used to check whether the string exists in our DOM.
 ```js
 ```
-There are many different jest matchers. Instead of memorizing them all it is best to just follow the docs. Here is an example of the `expect.` matcher. Look up its documentation to see how its implemented.
+
+Similarly, another method is `getByRole()` that allows us to extract a DOM node by its functionality. E.g.
+
+```js
+```
+
+RTL has a bunch of these `getBy...` methods. Instead of memorizing them all, it is best to look at the [docs](https://testing-library.com/docs/queries/about/).
+
+Now that we know how to query DOM nodes, we can test them using jest assertions. Recall that in the first exercise we saw the assertion `expect.toBeChecked()`. This isn't part of regular jest matchers, but instead are extensions provided by the `testing-library/jest-dom` library. 
+
+You can install this library using the command `npm install --save-dev @testing-library/jest-dom`. The library can then be imported like so:
+
+```js
+import '@testing-library/jest-dom'
+```
+Here is an example of the `expect.toBeDisabled()` matcher.
+
+```js
+
+```
+
+Once again, there are many different jest matchers. Instead of memorizing all of them, it is best to just follow the [docs](https://github.com/testing-library/jest-dom). 
 
 ### Instructions:
 
@@ -163,18 +202,51 @@ Hint: _Insert optional but recommended hint text here._
 
 <hr>
 
-## Exercise 4: Querying with RTL
+## Exercise 4: Different Query methods
 
 ### Narrative:
 
-Now that we know how to set up RTL, it is time for us to go through how to perform queries using the RTL libraries. Querying allows us to extract the different DOM nodes from our React component and test them individually. Fortunately for us RTL has many built in query methods that greatly simplifies this process for us. In this lesson, we will cover the `getBy...` query methods.
+Now that we know how to perform queries with `getBy`, it is time for us to move on to the other query method variants. RTL has two other categories of query methods called `queryBy` and `findBy`.
 
-To get a list of all the `getBy` methods go to the RTL docs. There are two ways of using these query methods. You can either extract them from the `render` function and apply them, or you can use the `screen` object `screen.getByText()`. We will focus on the `screen.getBy..` option for this lesson and the upcoming ones.
+`queryBy` : The `queryBy` method returns `null` if it doesn't find a DOM node. This is useful when asserting that an element is not present in the DOM. The example below shows a scenario when you'll need `queryBy`. Go to the [docs](https://testing-library.com/docs/queries/about/) to read more about the `queryBy` methods.
 
-Now that we know how to query DOM nodes, we can test them using jest assertions. Recall in the first exercise we saw an assertion like `expect.toBeChecked()`. This isn't part of the regular jest mathchers, but instead are extensions provided byt `blah blah` library. You can install this library using the command `npm install `. Once installed you can include it in your test.js file like so:
 ```js
 ```
-There are many different jest matchers. Instead of memorizing them all it is best to just follow the docs. Here is an example of the `expect.` matcher. Look up its documentation to see how its implemented.
+
+`findBy`: The `findBy` method is used for asynchronous elements which will eventually appear in the DOM. E.g. if the user is waiting for the result of an API call to be displayed, or the text in the DOM to be updated after a set time. The findBy method works by returning a Promise which resolves when the queried element renders in the DOM. Go to the [docs](https://testing-library.com/docs/queries/about/) to read more about the `findBy` method.
+
+```js
+```
+
+### Instructions:
+
+1. Checkpoint: _Insert checkpoint text here._
+
+Hint: _Insert optional but recommended hint text here._
+
+2. Checkpoint: _Insert checkpoint text here._
+
+Hint: _Insert optional but recommended hint text here._
+
+<hr>
+
+## Exercise 5: Different Query methods
+
+### Narrative:
+
+Previously we've learned how to query and extract the different DOM nodes from our React components. It is time for us to learn how to mimic user interactions e.g. clicking a checkbox, typing text, etc. Once again, this entire process has been made easier for us with the help of the library `testing-library/user-event`.
+
+The library can be installed with the command `npm install @testing-library/user-event` and then imported in test.js like so:
+
+```js
+import userEvent from '@testing-library/user-event'
+```
+
+The user-event library contains many built in methods that allow us to mimic user interactions. Here is an example where we mimic a user filling in a text box.
+
+```js
+```
+Once again, instead of memorizing all these, it is best if you just read the [docs](https://github.com/testing-library/user-event) and figure how the different methods work.
 
 ### Instructions:
 
