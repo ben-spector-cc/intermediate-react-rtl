@@ -361,10 +361,13 @@ _Check out the [content standards](http://curriculum-documentation.codecademy.co
 Congrats on completing this lesson! You can now use the React Testing Library to validate the behavior of your React components. 
 
 Let's review what we learned and practiced in this lesson:
-A
-B
-C
-D
+
+- React testing library allows us to test react components by mimicking real user interactions.
+- In order to make your component available in the unit test, you have to use the `render()` function.
+- RTL has built in query methods (`getBy`,`findBy`,`queryBy`) that allows you to extract the DOM nodes from your components.
+- You can test the behaviour of these extracted nodes by using the jest matchers provided by the `@testing-library/jest-dom` library.
+- You can mimic user interaction by using methods provided by the `testing-library/user-event` library.
+- Components that make API calls can be tested by using jest to make a fake API call.
 
 ### Instructions
 

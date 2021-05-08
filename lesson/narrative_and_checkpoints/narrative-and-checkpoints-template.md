@@ -82,25 +82,24 @@ In order to use React Testing Library, we will need to include the `@testing-lib
 npm install @testing-library/react
 ```
 
-Once you have added `@testing-library/react` to your project, you can import the `render()` function:
+Once you have added `@testing-library/react` to your project, you can use the `render()` function to render the element and make it available in your unit test. `render()` is a special function that takes in JSX as an argument, similar to `ReactDOM.render()`. 
+
+You can use make sure that your component is available in the test by using the `screen.debug()` method which prints out all the DOM contents. `screen` is a special object which can be thought of as a representation of the browser window. 
+
+`render()` and `screen` can be imported like so:
 
 ```js
-import { render } from '@testing-library/react
+import { render, screen } from '@testing-library/react
 ```
-`render()` is a special function that takes in JSX as an argument. E.g.
+Look at the code snippet below, it shows the output of a unit test that prints out the DOM contents.
 
 ```js
-render(<h1>Hello World</h1>);
-```
+test('shoult prints out the contents of the DOM' ()=>{
+    render(<h1>Hello World</h1>);
+    screen.debug()
+})
 
-It makes our component available in the unit test. We can make sure that this is the case by using the `screen.debug()` function. It prints out all the DOM contents. E.g.
-
-```js
-  render(<h1>Hello World</h1>);
-  screen.debug()
-```
-will print out
-```HTML
+// Output:
 <body>
   <div>
     <h1>
@@ -108,12 +107,6 @@ will print out
     </h1>
   </div>
 </body>
-```
-
-`screen` is a special object which can be thought of as a representation of the browser window. `screen` can be imported like so: 
-
-```js
-import { screen } from '@testing-library/react'`.
 ```
 ### Instructions:
 
