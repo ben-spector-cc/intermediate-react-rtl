@@ -135,16 +135,16 @@ Hint: Your syntax should look something like this:
 
 ### Narrative:
 
-Now that we know how to set up RTL, we can finally start testing our React components. To do so, we first have to query and extract the DOM nodes from our components. Once that is done, we can check and see if the extracted DOM nodes have the correct content or are working as expected. Fortunately for us, RTL has many built in query methods that greatly simplifies this process. In this lesson, we will cover the `getBy...` query methods. 
+Now that we know how to set up RTL, we can finally start testing our React components. To do so, we first have to query and extract the DOM nodes from our components. Once that is done, we can check and see if the extracted DOM nodes have the correct content or are working as expected. Fortunately for us, RTL has many built in query methods that greatly simplifies this process. In this lesson, we will cover the `getBy` query methods. 
 
-There are two ways of accessing the `getBy()` functions:
+There are two ways of accessing the `getBy` functions:
 
 - You can access them by applying destructuring on the `render()` function.
 
 ```js
-  const {getByText, getByLabelText} = render(<App/>)
-  const node1 = getByText('Login Page')
-  const node2 = getByLabelText('Username')
+const {getByText, getByLabelText} = render(<App/>)
+const node1 = getByText('Login Page')
+const node2 = getByLabelText('Username')
 ```
 
 - Or you can use the `screen` object to use them directly
@@ -155,18 +155,42 @@ const node1 = screen.getByText()
 const node2 = screen.getByLabelText()
 ```
 
-We will focus on the `screen.getBy..` option for this lesson and the upcoming ones.
+We will focus on the `screen.getBy` option for this lesson and the upcoming ones.
 
-Look at the example below, the `getByText()` method is used to check whether the string exists in our DOM.
+Look at the example below, the `getByText()` method is used to extract a DOM element with a specified string.
 ```js
+import {render} from '@testing-library/react'
+
+const Button = ()=>{
+    return <button type="submit" disabled>Submit</button>
+}
+
+test('extracts the button DOM node', () => {
+  // Render the Button component
+  render(<Button/>);
+  // Extract the <button>Submit</button> node
+  const button = screen.getByText('Submit') 
+});
 ```
 
 Similarly, another method is `getByRole()` that allows us to extract a DOM node by its functionality. E.g.
 
 ```js
+import {render} from '@testing-library/react'
+
+const Button = ()=>{
+    return <button type="submit" disabled>Submit</button>
+}
+
+test('extracts the button DOM node', () => {
+  // Render the Button component
+  render(<Button/>);
+  // Extract the <button>Submit</button> node
+  const button = screen.getByRole('button') 
+});
 ```
 
-RTL has a bunch of these `getBy...` methods. Instead of memorizing them all, it is best to look at the [docs](https://testing-library.com/docs/queries/about/).
+RTL has a bunch of these `getBy` methods. Instead of memorizing them all, it is best to look at the [docs](https://testing-library.com/docs/queries/about/).
 
 Now that we know how to query DOM nodes, we can test them using jest assertions. Recall that in the first exercise we saw the assertion `expect.toBeChecked()`. This isn't part of regular jest matchers, but instead are extensions provided by the `testing-library/jest-dom` library. 
 
@@ -178,7 +202,21 @@ import '@testing-library/jest-dom'
 Here is an example of the `expect.toBeDisabled()` matcher.
 
 ```js
+import {render} from '@testing-library/react'
+import '@testing-library/jest-dom'
 
+const Button = ()=>{
+    return <button type="submit" disabled>Submit</button>
+}
+
+test('should show the button as disabled', () => {
+  // render Button component
+  render(<Button/>);
+  // Extract <button>Submit</button> Node
+  const button = screen.getByRole('button')
+  // Assert button is disabled
+  expect(button).toBeDisabled()
+});
 ```
 
 Once again, there are many different jest matchers. Instead of memorizing all of them, it is best to just follow the [docs](https://github.com/testing-library/jest-dom). 
@@ -201,15 +239,71 @@ Hint: _Insert optional but recommended hint text here._
 
 Now that we know how to perform queries with `getBy`, it is time for us to move on to the other query method variants. RTL has two other categories of query methods called `queryBy` and `findBy`.
 
+Look at the code below. It shows the code for a simple component that changes the header text to 'Goodbye!' after the user clicks a button. We will be using this `App` component to demonstrate the different query types.
+
+```js
+import {useState} from 'react';
+
+const App = ()=>{
+
+  const [text, setText] = useState('Hello World!');
+
+  // Changes header text after interval of 500ms
+  const handleClick = () => {
+    setTimeout(()=>{
+        setText('Goodbye!')
+    },500)
+  };
+
+  return (
+    <div>
+      <h1>{text}</h1>
+      <button onClick={handleClick}>click me</button>
+    </div>
+  )
+}
+
+export default App
+```
+
 `queryBy` : The `queryBy` method returns `null` if it doesn't find a DOM node. This is useful when asserting that an element is not present in the DOM. The example below shows a scenario when you'll need `queryBy`. Go to the [docs](https://testing-library.com/docs/queries/about/) to read more about the `queryBy` methods.
 
 ```js
+import App from './components/App'
+import {render} from '@testing-library/react'
+
+test('should show DOM content as null', () => {
+  // Render App
+  render(<App />)
+  // Extract App 
+  const header = screen.queryByText('Goodbye!')
+  // Assert null as we have not clicked the button
+  expect(header).toBeNull()
+})
 ```
 
 `findBy`: The `findBy` method is used for asynchronous elements which will eventually appear in the DOM. E.g. if the user is waiting for the result of an API call to be displayed, or the text in the DOM to be updated after a set time. The findBy method works by returning a Promise which resolves when the queried element renders in the DOM. Go to the [docs](https://testing-library.com/docs/queries/about/) to read more about the `findBy` method.
 
 ```js
+import App from './components/App'
+import {render} from '@testing-library/react'
+
+test('should show text content as Goodbye', async () => {
+  // Render App
+  render(<App />)
+  // Extract button node 
+  const button = screen.getByRole('button')
+  // click button
+  userEvent.click(button)
+  // Extract header with new text
+  const header = await screen.findByText('Goodbye!')
+  // Assert header to have text 'Goodbye!'
+  expect(header).toHaveTextContent('Goodbye!')
+})
 ```
+In the example above we use `findByText()` as the 'Goodbye!' message does not render immediately. This is because our `handleClick()` function chnages the text after an interval of 500ms. So we have to wait a bit before the new text is rendered in the DOM
+
+Note the `async` and `await` keywords in the example above. Remember that `findBy` methods return a promise and thus the callback function that carries out the unit test must be asynchronous. 
 
 ### Instructions:
 
@@ -223,7 +317,7 @@ Hint: _Insert optional but recommended hint text here._
 
 <hr>
 
-## Exercise 5: Different Query methods
+## Exercise 5: Mimicking User Interactions
 
 ### Narrative:
 
@@ -238,6 +332,33 @@ import userEvent from '@testing-library/user-event'
 The user-event library contains many built in methods that allow us to mimic user interactions. Here is an example where we mimic a user filling in a text box.
 
 ```js
+
+import {render} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
+
+const Textbox = ()=>{
+  return(
+      <form>
+          <label role = "textbox" htmlFor = "greeting">
+              Greeting:
+          </label>
+          <input type="text" id="greeting" />
+          <input type="submit" value="Submit" />
+      </form>
+  )
+}
+
+test('should show text content as Hey Mack!', () => {
+  // Render TextArea
+  render(<Textbox />)
+  // Extract textbox component
+  const textbox = screen.getByLabelText('Greeting:')
+  // Simulate typing Hey Mack!
+  userEvent.type(textbox, 'Hey Mack!')
+  // Assert textbox has text conent 'Hey Mack!'
+  expect(textbox).toHaveValue('Hey Mack!')
+})
 ```
 Once again, instead of memorizing all these, it is best if you just read the [docs](https://github.com/testing-library/user-event) and figure how the different methods work.
 
