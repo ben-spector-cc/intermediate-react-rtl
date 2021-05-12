@@ -8,17 +8,14 @@ _Read the content standards for expectations for [narratives](http://curriculum-
 
 ### Narrative:
 
-In this lesson, you will learn how to test your React components with the React Testing Library. Remember, we need to test our code so that we can be sure that any application we are building is working as expected. If we are building our UI using React, we can use RTL as a way to ensure that our react components are working correctly.
+In this lesson, you will learn how to test your React components with the **R**eact **T**esting **L**ibrary (RTL). Remember, we need to test our code so that we can be sure that the application we are building is working as expected. If we are building our UI using React, we can use RTL as a way to ensure that our React components are working correctly.
 
-The main advantage of RTL over other testing frameworks is that it allows us to test our component in a way that mimic real user interactions. The logic behind this is that in actual production, a user will not care about the implementation details of a react component e.g. the component's state, the props passed to it, etc. The user will only care on whether or not they are able to use the app.
+The main advantage of RTL over other testing frameworks is that it allows us to test our components in a way that mimics real user interactions. The logic behind this is that a user will not care about the implementation details of a React component e.g. the component's state, the props passed to it, etc. The user will only care about whether or not they are able to use the app.
 
-Take a moment to observe the UI in your browser's window. It displays a grocery list with the following items. 
+Before we jump into the lesson, let's take a quick look at an example that shows off the power and elegance of the React Testing Library. 
 
-- Apples
-- Milk
-- Cereal
-
-You can click on the checkboxes to mark that you've added one of these items to your cart. Go to `GroceryList.js` and observe the code for this component.
+Take a moment to observe the UI in your browser's window. It displays a grocery list with a few items. 
+You can click on the checkboxes to mark that you've added one of these items to your cart. You can see the code for this component in the file `GroceryList.js`. 
 
 ```js
 const GroceryList = ()=>{
@@ -46,12 +43,13 @@ const GroceryList = ()=>{
 export default GroceryList
 ```
 
-Go to the `test.js` file. It contains a unit test using the RTL library. Observe how it mimicks a user clicking the first checkbox.
+Go to the `test.js` file. It contains a unit test using RTL. Observe how it mimics a user clicking the first checkbox.
 
 ```js
 import { render, screen, cleanup } from '@testing-library/react';
 import GroceryList from './components/GroceryList';
 import userEvent from '@testing-library/user-event';
+
 test('should mark the first checkbox as checked', () => {
   // render the grocery list
   render(<GroceryList />);
@@ -63,10 +61,9 @@ test('should mark the first checkbox as checked', () => {
   expect(appleItem).toBeChecked();
 });
 ```
-
-Don't worry if you cannot understand every single line of the code snippet above. In the upcoming lessons, we will cover RTL so that you can understand everything that's going on.
-
 Can you see how we are able to test the `GroceryList` component without knowing any of its implementation details? This is what makes RTL so powerful. We can test our React components as if we are a real user and not worry about the specific logic that went behind coding them.
+
+Don't worry if you cannot understand every single line of the code snippet above. In the upcoming exercises, we will cover RTL so that you can understand everything that's going on.
 
 <hr>
 
@@ -74,7 +71,7 @@ Can you see how we are able to test the `GroceryList` component without knowing 
 
 ### Narrative:
 
-In our upcoming lessons, we will use the components from {appName} web app to learn about RTL. Before we do that though, we must know how to set up RTL tests in our app.
+In our upcoming exercises, we will use the components from {appName} web app to learn about RTL. Before we do that though, we must know how to set up RTL tests in our app.
 
 In order to use React Testing Library, we will need to include the `@testing-library/react` package in our project by using npm like so:
 
@@ -82,20 +79,22 @@ In order to use React Testing Library, we will need to include the `@testing-lib
 npm install @testing-library/react
 ```
 
-Once you have added `@testing-library/react` to your project, you can use the `render()` function to render the element and make it available in your unit test. `render()` is a special function that takes in JSX as an argument, similar to `ReactDOM.render()`. 
+Once we have added `@testing-library/react` to our project, we can import the two essential values, `render` and `screen`, into our tests. `render()` is a function that we can use to virtually render components and make them available in our unit tests. Similar to `ReactDOM.render()`, RTL's `render()` function takes in JSX as an argument. 
 
-You can use make sure that your component is available in the test by using the `screen.debug()` method which prints out all the DOM contents. `screen` is a special object which can be thought of as a representation of the browser window. 
+`screen` is a special object which can be thought of as a representation of the browser window. We can make sure that our virtually rendered components are available in the test by using the `screen.debug()` method which prints out all the DOM contents.  `screen` has a few other useful methods that we'll cover in the upcoming exercises but for now, let's look at an example. 
 
-`render()` and `screen` can be imported like so:
 
-```js
-import { render, screen } from '@testing-library/react
-```
-Look at the code snippet below, it shows the output of a unit test that prints out the DOM contents.
+Look at the code snippet below, it shows the output of a unit test that prints out the DOM contents of the `Greeting` component.
 
 ```js
-test('shoult prints out the contents of the DOM' ()=>{
-    render(<h1>Hello World</h1>);
+import { render, screen } from '@testing-library/react'
+
+function Greeting() {
+  return (<h1>Hello World</h1>)
+}
+
+test('should prints out the contents of the DOM' ()=>{
+    render(<Greeting />);
     screen.debug()
 })
 
@@ -108,6 +107,11 @@ test('shoult prints out the contents of the DOM' ()=>{
   </div>
 </body>
 ```
+
+After importing the `render` and `screen` values from `'@testing-library/react'`, a test is created using the `test()` function from the [Jest testing framework](https://jestjs.io/docs/getting-started). Inside, the `<Greeting>` component is virtually rendered and then the resulting virtual DOM is printed via the `screen.debug()` method.
+
+Notice how the output shows the rendered contents of `<Greeting>` (an `<h1>` element) and not the component itself. As was mentioned in the first exercise, React Testing Library strives to produce a testing environment that is as close to the user's experience as possible.
+
 ### Instructions:
 
 1. Checkpoint: Install @testing-library/react. To verify that you have successfully added the package to your project, navigate to package.json and check that `@testing-library/react` appears in the dependencies array.
@@ -118,10 +122,10 @@ Hint: Use npm install --save to add the package to your project.
 
 Hint: Your syntax should look something like this:
 ```js
-import {componentName} from `name-of-package`
+import { value1, value2} from `name-of-package`
 ```
 
-3. Checkpoint: Call the render function on the {componentName} component and then use screen.debug() to make sure the component is included in the unit test. What do you see?
+3. Checkpoint: Inside the provided `test()`, call the `render()` function on the {componentName} component and then use `screen.debug()` to make sure the component is included in the unit test. Then, in your terminal, run the `npm test` command to run the test. What do you see?
 
 Hint: Your syntax should look something like this:
 ```js
@@ -135,11 +139,11 @@ Hint: Your syntax should look something like this:
 
 ### Narrative:
 
-Now that we know how to set up RTL, we can finally start testing our React components. To do so, we first have to query and extract the DOM nodes from our components. Once that is done, we can check and see if the extracted DOM nodes have the correct content or are working as expected. Fortunately for us, RTL has many built in query methods that greatly simplifies this process. In this lesson, we will cover the `getBy` query methods. 
+Now that we know how to set up RTL, we can finally start testing our React components. To do so, we first have to query and extract the DOM nodes from our components. Once that is done, we can check and see if the extracted DOM nodes have the correct content or are working as expected. Fortunately for us, RTL has many built in query methods that greatly simplifies this process. In this exercise, we will cover the `getBy` query methods. 
 
-There are two ways of accessing the `getBy` functions:
+There are two ways of accessing the `getByX` functions:
 
-- You can access them by applying destructuring on the `render()` function.
+- We can access them by applying destructuring on the object returned by the `render()` function.
 
 ```js
 const {getByText, getByLabelText} = render(<App/>)
@@ -147,33 +151,33 @@ const node1 = getByText('Login Page')
 const node2 = getByLabelText('Username')
 ```
 
-- Or you can use the `screen` object to use them directly
+- Or We can use the `screen` object to use them directly
 
 ```js
 render(<App/>)
-const node1 = screen.getByText()
-const node2 = screen.getByLabelText()
+const node1 = screen.getByText('Login Page')
+const node2 = screen.getByLabelText('Username')
 ```
 
-We will focus on the `screen.getBy` option for this lesson and the upcoming ones.
+We will focus on the `screen.getByX` option for this exercise and the upcoming ones.
 
-Look at the example below, the `getByText()` method is used to extract a DOM element with a specified string.
+Look at the example below, the `.getByText()` method is used to extract a DOM element with text that matches a specified string.
 ```js
-import {render} from '@testing-library/react'
+import { render, screen } from '@testing-library/react';
 
 const Button = ()=>{
     return <button type="submit" disabled>Submit</button>
-}
+};
 
-test('extracts the button DOM node', () => {
+test('A "Submit" button is rendered', () => {
   // Render the Button component
   render(<Button/>);
   // Extract the <button>Submit</button> node
-  const button = screen.getByText('Submit') 
+  const button = screen.getByText('Submit'); 
 });
 ```
 
-Similarly, another method is `getByRole()` that allows us to extract a DOM node by its functionality. E.g.
+Similarly, another method is `.getByRole()` that allows us to extract a DOM node by its role type. Look at the example below, it shows us another way we can query for the `<button>` element using `.getByRole()`.
 
 ```js
 import {render} from '@testing-library/react'
@@ -190,16 +194,16 @@ test('extracts the button DOM node', () => {
 });
 ```
 
-RTL has a bunch of these `getBy` methods. Instead of memorizing them all, it is best to look at the [docs](https://testing-library.com/docs/queries/about/).
+Though `.getByText()` and `.getByRole()` often are enough, RTL has a bunch of these `.getByX` methods. Instead of memorizing them all, it is best to look at the [docs](https://testing-library.com/docs/queries/about/) to find the one that best suits your needs..
 
-Now that we know how to query DOM nodes, we can test them using jest assertions. Recall that in the first exercise we saw the assertion `expect.toBeChecked()`. This isn't part of regular jest matchers, but instead are extensions provided by the `testing-library/jest-dom` library. 
+Now that we know how to query DOM nodes, we can test them using [Jest assertions](https://jestjs.io/docs/expect). Recall that in the first exercise we saw the assertion `expect.toBeChecked()`. This isn't part of the regular set of Jest matchers, but instead are extensions provided by the `testing-library/jest-dom` library. 
 
 You can install this library using the command `npm install --save-dev @testing-library/jest-dom`. The library can then be imported like so:
 
 ```js
 import '@testing-library/jest-dom'
 ```
-Here is an example of the `expect.toBeDisabled()` matcher.
+Here is an example of the `expect.toBeDisabled()` matcher being used to test a DOM node extracted with the `screen.getByRole()` method.
 
 ```js
 import {render} from '@testing-library/react'
@@ -219,7 +223,7 @@ test('should show the button as disabled', () => {
 });
 ```
 
-Once again, there are many different jest matchers. Instead of memorizing all of them, it is best to just follow the [docs](https://github.com/testing-library/jest-dom). 
+Once again, there are many different jest matchers. In this lesson we'll get a chance to see a number of the most common ones, however, instead of memorizing all of them, it is best to just follow the [docs](https://github.com/testing-library/jest-dom). 
 
 ### Instructions:
 
@@ -237,14 +241,14 @@ Hint: _Insert optional but recommended hint text here._
 
 ### Narrative:
 
-Now that we know how to perform queries with `getBy`, it is time for us to move on to the other query method variants. RTL has two other categories of query methods called `queryBy` and `findBy`.
+Now that we know how to perform queries with `.getByX` methods, it is time for us to move on to the other query method variants. RTL has two other categories of query methods called `.queryByX` and `.findByX`.
 
 Look at the code below. It shows the code for a simple component that changes the header text to 'Goodbye!' after the user clicks a button. We will be using this `App` component to demonstrate the different query types.
 
 ```js
-import {useState} from 'react';
+import { useState } from 'react';
 
-const App = ()=>{
+const App = () => {
 
   const [text, setText] = useState('Hello World!');
 
@@ -266,11 +270,13 @@ const App = ()=>{
 export default App
 ```
 
-`queryBy` : The `queryBy` method returns `null` if it doesn't find a DOM node. This is useful when asserting that an element is not present in the DOM. The example below shows a scenario when you'll need `queryBy`. Go to the [docs](https://testing-library.com/docs/queries/about/) to read more about the `queryBy` methods.
+Let's start with the [`.queryByX`](https://testing-library.com/docs/queries/about/) variants. The `.queryByX` methods return `null` if they don't find a DOM node unlike the `.getByX` methods which throw an error. This is useful when asserting that an element is not present in the DOM. 
+
+The example below shows a scenario when you'll need `.queryByX` methods. In this example, we want to confirm that the `header` does not yet contain the text `'Goodbye'`:
 
 ```js
 import App from './components/App'
-import {render} from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
 test('should show DOM content as null', () => {
   // Render App
@@ -282,7 +288,11 @@ test('should show DOM content as null', () => {
 })
 ```
 
-`findBy`: The `findBy` method is used for asynchronous elements which will eventually appear in the DOM. E.g. if the user is waiting for the result of an API call to be displayed, or the text in the DOM to be updated after a set time. The findBy method works by returning a Promise which resolves when the queried element renders in the DOM. Go to the [docs](https://testing-library.com/docs/queries/about/) to read more about the `findBy` method.
+By using the `.queryByText()` variant, when there is no element with the text `'Goodbye!', the value `null` is returned and we can successfully validate this with `expect(header).toBeNull()`. If the `.getByText()` method were used instead, the test would fail immediately due to the error rather than continuing on to the `expect()` assertion.
+
+Next, let's discuss the [`.findByX`](https://testing-library.com/docs/queries/about/) variants. The `.findByX` methods are used to query for asynchronous elements which will eventually appear in the DOM. For example, if the user is waiting for the result of an API call to be displayed, or the text in the DOM to be updated after a set time. The `.findByX` methods work by returning a Promise which resolves when the queried element renders in the DOM.
+
+The example below shows a scenario when you'll need `.findByX` methods. In this example, we want to confirm that the `header`will eventually display the text `'Goodbye'`
 
 ```js
 import App from './components/App'
@@ -301,9 +311,9 @@ test('should show text content as Goodbye', async () => {
   expect(header).toHaveTextContent('Goodbye!')
 })
 ```
-In the example above we use `findByText()` as the 'Goodbye!' message does not render immediately. This is because our `handleClick()` function chnages the text after an interval of 500ms. So we have to wait a bit before the new text is rendered in the DOM
+In the example above we use `.findByText()` as the `'Goodbye!'` message does not render immediately. This is because our `handleClick()` function changes the text after an interval of 500ms. So, we have to wait a bit before the new text is rendered in the DOM
 
-Note the `async` and `await` keywords in the example above. Remember that `findBy` methods return a promise and thus the callback function that carries out the unit test must be asynchronous. 
+Note the `async` and `await` keywords in the example above. Remember that `findBy` methods return a Promise and thus the callback function that carries out the unit test must be identified as `async` while the `screen.findByText()` method must be preceded by `await`. . 
 
 ### Instructions:
 
@@ -360,7 +370,9 @@ test('should show text content as Hey Mack!', () => {
   expect(textbox).toHaveValue('Hey Mack!')
 })
 ```
-Once again, instead of memorizing all these, it is best if you just read the [docs](https://github.com/testing-library/user-event) and figure how the different methods work.
+In the example above, the `userEvent.type()` method is used which accepts a DOM node to interact with (`textbox`) and a string to type into that node (`'Hey Mack!'). 
+
+Once again, instead of memorizing all these, it is best if you just read the [docs](https://github.com/testing-library/user-event) and figure out how the different methods work.
 
 ### Instructions:
 
@@ -373,3 +385,4 @@ Hint: _Insert optional but recommended hint text here._
 Hint: _Insert optional but recommended hint text here._
 
 <hr>
+
