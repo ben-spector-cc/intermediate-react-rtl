@@ -386,3 +386,237 @@ Hint: _Insert optional but recommended hint text here._
 
 <hr>
 
+## Exercise 6: Testing asynchronous components
+
+### Narrative:
+
+In the previous exercise we've learned how to extract DOM nodes using the different query variants. One of the methods we learned was the `.findByX` methods that allowed us to test components that render asynchronously. In this exercise, we will cover the other RTL methods for asynchronous testing. Specifically, We will cover the `waitFor()` and `waitForElementToBeRemoved()` async methods.
+
+In order to use these methods, you need to import them from  `@testing-library/react`.
+
+```js
+import { waitFor, waitForElementToBeRemoved } from '@testing-library/react'
+```
+
+As with the other async methods, the `waitFor()` method returns a Promise, so you have to preface its call with the `await` keyword. It takes a callback function as an argument where you can perform your queries and run your assertions. E.g.
+
+```js
+// This code snippet is taken from the RTL docs
+await waitFor(() => expect(mockAPI).toHaveBeenCalledTimes(1))
+```
+
+Look at the example below, it shows a component that displays a counter which updates asynchronously when you click the "Increase Count" button. You can use the `waitFor()` method to check if the component is working as expected.
+
+```js
+import {useState} from 'react'
+import {render, screen, waitFor} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
+
+const Counter = ()=>{
+    const [count,setCount] = useState(0);
+    const handleClick =()=>{
+      // Counter updates after a time of 250ms
+        setTimeout(()=>{
+            setCount(count => count + 1)
+        },250)
+    };
+    return(
+        <div>
+            <h1>{count}</h1>
+            <button onClick = {handleClick}>Increase Count</button>
+        </div>
+    );
+}
+
+test('should update counter', async ()=>{
+  // Render Counter
+  render(<Counter/>)
+  // Extract button node 
+  const button = screen.getByRole('button')
+  // click button
+  userEvent.click(button)
+  // Extract initial button display
+  const count = screen.getByText('0')
+  // Make sure initial count value is 0
+  expect(count).toHaveTextContent('0')
+  // Use waitFor to check if count is incremented
+  await waitFor(()=> expect(screen.queryByText('1')).toBeInTheDocument())
+})
+
+```
+In the code snippet above, the callback inside `waitFor()` asserted that the the text in the counter would be updated to "1". We first extracted our node with the `.queryByText()` method and then ran our assertion `expected().toBeInTheDocument()`.
+
+What if an element is removed asynchronously? In such cases, we can use the `waitForElementToBeRemoved()` method. This method returns a Promise which resolves when the element inside its callback is removed. E.g.
+
+```js
+// This code snippet is taken from the RTL docs
+test('movie title no longer present in DOM', async () => {
+  // element is removed
+  await waitForElementToBeRemoved(() => queryByText('the mummy'))
+})
+```
+
+Look at the example below. We have a component which displays a header. This header is removed asynchronously when the button "Remove Header" is clicked. This component can be tested with the `waitForElementToBeRemoved()` method.
+
+```js
+const Header = ()=>{
+   const handleClick = ()=>{
+       setTimeout(()=>{
+         document.querySelector('h1').remove()
+       },250)
+   };
+   return(
+       <div>
+           <h1>Hey Everybody</h1>
+           <button onClick = {handleClick}>Remove Header</button>
+       </div>
+   )
+}
+
+test('should remove header display', async ()=>{
+  // Render Header
+  render(<Header/>)
+  // Extract button node 
+  const button = screen.getByRole('button')
+  // click button
+  userEvent.click(button)
+  await waitForElementToBeRemoved(()=> screen.queryByText('Hey Everybody'))
+})
+```
+
+In the code snippet above, since the header display is removed 250ms after the button is clicked, we can use the `waitForElementToBeRemoved()` method to check if the header is removed successfully from the DOM.
+
+Note: we could've also used `waitFor()` to run this test:
+
+```js
+test('should remove header display', async ()=>{
+  // Render Header
+  render(<Header/>)
+  // Extract button node 
+  const button = screen.getByRole('button')
+  // click button
+  userEvent.click(button)
+  await waitFor(()=> expect(screen.queryByText('Hey Everybody')).toBeNull())
+})
+```
+
+This is, however, a bit more verbose than using `waitForElementToBeRemoved()`. How you decide to run your tests is upto you.
+
+### Instructions:
+
+1. Checkpoint: _Insert checkpoint text here._
+
+Hint: _Insert optional but recommended hint text here._
+
+2. Checkpoint: _Insert checkpoint text here._
+
+Hint: _Insert optional but recommended hint text here._
+
+<hr>
+
+## Exercise 7: Testing Components That Make API Calls
+
+### Narrative:
+
+We've learned how to use async methods to run our test, it is now time for us to learn how to test React components that make API calls. Remember, in unit tests our react components should not hit an actual endpoint. This is because hitting a real endpoint can be a slow process. Also, if we're using a third party API, they might not appreacite us overloading their servers with requests. Instead we should mimic an API call that returns a mock response.
+
+Fortunately for us, we can mock an API call using the `jest.fn()` method to see if our component that calls the API is working as expected.
+
+Look at the component below. It calls an API and then renders the `name` property of the response data on the screen. 
+
+```js
+import { useState, useEffect } from "react"
+
+const App = ({url})=>{
+    const [data,setData] = useState(null)
+    useEffect(()=>{
+        // LoadData calls fetch with the url prop 
+        // and sets the 'data' state to respone.json()
+        const loadData = async ()=>{
+            const res = await fetch(url);
+            const data = await res.json();
+            setData(data)
+        }
+
+        loadData();
+
+    },[])
+
+    if(!data){
+        // If data is not present return loading
+        return <span data-testid = "loading" >Loading...</span>
+    }
+    return(
+        <div>
+            {/*Render the data property of the response json*/}
+            <h2 data-testid = "name"> {data.name}</h2>
+        </div>
+    )
+
+}
+```
+
+Look at our test below. Observe how we are using the `jest.fn()` method to mock an API response. We are then using this mock fetch to fake an API call and test our component.
+
+```js
+import {render, screen, waitFor} from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
+
+// Mocking fetch call
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({ name: 'John Doe', age: 27}),
+  })
+);
+
+beforeEach(() => {
+  fetch.mockClear();
+});
+
+test('should fetch and display name data', async ()=>{
+
+  const url = '/user?id=1'
+  // Render ApiApp
+  render(<App url ={url}/>)
+
+  // Assert loading text appears
+  expect(screen.getByTestId('loading')).toHaveTextContent('Loading...')
+  // Assert data retrieved from fetch has name property 'John'
+  await waitFor(()=> expect(screen.getByTestId('name').toHaveTextContent('John Doe')))
+  // Assert fetch to have been called once
+  expect(fetch).toHaveBeenCalledTimes(1);
+  // Assert fetch to have been called with url '/user?id=1'
+  expect(fetch).toHaveBeenCalledWith('/user?id=1');
+
+})
+```
+In the code snippet above, we are first checking to see if our component successfully displays the "Loading..." message. Since an API call is asynchronous, we are then using the `waitFor()` method to check if the call is successful and that we are successfully displaying the name property from the response JSON. Observe the assertions `toHaveBeenCalledTimes()` and `toHaveBeenCalledWith()`. These are extensions of jest assertions that allow you to check whether we are calling our API with the correct parameters.
+
+### Instructions:
+
+1. Checkpoint: _Insert checkpoint text here._
+
+Hint: _Insert optional but recommended hint text here._
+
+2. Checkpoint: _Insert checkpoint text here._
+
+Hint: _Insert optional but recommended hint text here._
+
+<hr>
+
+
+## Review
+
+### Narrative:
+
+Good job! We can now use RTL to test our React components. Let's quickly review what we've learned so far:
+
+- React testing library allows us to test react components by mimicking real user interactions.
+- In order to make your component available in the unit test, you have to use the `render()` function. You can check to see the availabity of your component by using the `screen.debug()` method. `screen` is a speciall object that can be thought as a representation of the browser window.
+- RTL has built in query methods (`.getByX`,`.findByX`,`.queryByX`) that allows you to extract the DOM nodes from your components. You can use these query nodes by using the `screen` object e.g. `screen.getByX`
+- You can test the behaviour of these extracted nodes by using the jest matchers provided by the `@testing-library/jest-dom` library. E.g. `expect().toBeChecked`.
+- You can mimic user interaction by using methods provided by the `testing-library/user-event` library. An example method is `userEvent.click()`.
+- Besides `.findByX`, RTL has the async methods `waitFor()` and `waitForElementToBeRemoved()` to test asynchronous components.
+- Components that make API calls can be tested by using jest to mock an API call.
