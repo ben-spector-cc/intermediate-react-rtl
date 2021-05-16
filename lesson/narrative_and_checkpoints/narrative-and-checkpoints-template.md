@@ -112,11 +112,13 @@ After importing the `render` and `screen` values from `'@testing-library/react'`
 
 Notice how the output shows the rendered contents of `<Greeting>` (an `<h1>` element) and not the component itself. As was mentioned in the first exercise, React Testing Library strives to produce a testing environment that is as close to the user's experience as possible.
 
+For this lesson, we will be using the project Passing Thoughts for all our checkpoints. This is a React app that allows you to fill out a simple input form and post a "thought". Once the thought is posted, it will disappear after 15 seconds. Go to the [project](https://www.codecademy.com/courses/react-101/projects/react-hooks-passing-thoughts) and check it out for yourself.
+
 ### Instructions:
 
-1. Checkpoint: Install @testing-library/react. To verify that you have successfully added the package to your project, navigate to package.json and check that `@testing-library/react` appears in the dependencies array.
+1. Checkpoint: Install `@testing-library/react`. To verify that you have successfully added the package to your project, navigate to package.json and check that `@testing-library/react` appears in the dependencies array.
 
-Hint: Use npm install --save to add the package to your project.
+Hint: Use npm install `package name` --save dev to add the package to your project.
 
 2. Checkpoint: In test.js import `render()` and `screen` from @testing-library/react.
 
@@ -125,7 +127,7 @@ Hint: Your syntax should look something like this:
 import { value1, value2} from `name-of-package`
 ```
 
-3. Checkpoint: Inside the provided `test()`, call the `render()` function on the {componentName} component and then use `screen.debug()` to make sure the component is included in the unit test. Then, in your terminal, run the `npm test` command to run the test. What do you see?
+3. Checkpoint: Inside the provided `test()`, call the `render()` function on the `Thought` component and then use `screen.debug()` to make sure the component is included in the unit test. Then, in your terminal, run the `npm test` command to run the test. What do you see?
 
 Hint: Your syntax should look something like this:
 ```js
@@ -227,13 +229,31 @@ Once again, there are many different jest matchers. In this lesson we'll get a c
 
 ### Instructions:
 
-1. Checkpoint: _Insert checkpoint text here._
+1. Checkpoint: Install and import the `@testing-library/jest-dom` library.
 
-Hint: _Insert optional but recommended hint text here._
+Hint: Use npm install `package name` --save dev to add the package to your project. Then import the ENTIRE library like so
 
-2. Checkpoint: _Insert checkpoint text here._
+```js
+import package name
+```
 
-Hint: _Insert optional but recommended hint text here._
+2. Checkpoint: Use `.getByText()` to extract the header node of the `App` component. Then call the `.toHaveText()` assertion to confirm that the header node does indeed contain the text "Passing Thoughts"
+
+Hint: Your code should be something like this
+
+```js
+const heaader = screen.getByText(some text)
+expect(header).toHaveText(some Text)
+```
+
+3. Checkpoint: Use `.getByRole()` to extract the button node of the `Thought` component. Then use the a jest assertion to check if the button is active.
+
+Hint: Your code should be something like this
+
+```js
+const button = screen.getByRole(button)
+expect(button).toBeEnabled()
+```
 
 <hr>
 
@@ -317,13 +337,31 @@ Note the `async` and `await` keywords in the example above. Remember that `findB
 
 ### Instructions:
 
-1. Checkpoint: _Insert checkpoint text here._
+1. Checkpoint: Use the `.queryByText()` method to extract the submit button of the `AddThought()`. Then assert that the node is present in the DOM.
 
-Hint: _Insert optional but recommended hint text here._
+Hint: Your code should be something like this
 
-2. Checkpoint: _Insert checkpoint text here._
+```js
+const submit = screen.queryByText(some text)
+expect(submit).toBeInTheDocument()
+```
+2. Checkpoint: The `.queryByText('Hey There')` method in the test below is querying for an element that doesn't exist in the document. Use an assert to confirm that this element is not present in the DOM.
 
-Hint: _Insert optional but recommended hint text here._
+Hint: Your code should be something like this
+
+```js
+const node = screen.queryByText(some text)
+expect(node).toBeNull()
+```
+
+3. Checkpoint: The test below mimics a user posting a thought with the text content 'Oreos are delicious'. Use the `.findByText()` method to assert that this node will appear in the DOM.
+
+Hint: Your code should be something like this
+
+```js
+const thought = await findByText(some text)
+expect(thought).toBeInTheDocument()
+```
 
 <hr>
 
@@ -376,13 +414,33 @@ Once again, instead of memorizing all these, it is best if you just read the [do
 
 ### Instructions:
 
-1. Checkpoint: _Insert checkpoint text here._
+1. Checkpoint: Install the `@testing-library/user-event` library and then import the `userEvent` object.
 
-Hint: _Insert optional but recommended hint text here._
+Hint: Use npm install `package name` --save dev to add the package to your project. Then import it like so:
 
-2. Checkpoint: _Insert checkpoint text here._
+```js
+import {name} from package
+```
 
-Hint: _Insert optional but recommended hint text here._
+2. Checkpoint: The test below, mimics a user posting a thought with the text content 'Oreos are delicious'. Use the `userEvent` object to mimic a user pressing the 'X' button of this `Thought` component and thereby removing it. Then use the `.queryByText()` and a jest assertion to confirm the thought has been removed from the DOM.
+
+```js
+// First extract the submit button. Then
+userEvent.click(submit)
+// Query for the removed Thought component. Then
+expect(thought).toBeNull()
+```
+
+3. Checkpoint: In the test below use the `userEvent` object to mimics a user posting a thought with the text content 'Did I forget my keys'. Then use the `.findByText()` query method to confirm that this thought gets added to the DOM.
+
+```js
+// First extract the desired nodes
+userEvent.type(input, some text)
+userEvent.click(submit)
+const thought = await findByText(some text)
+expect(thought).toBeInTheDocument()
+```
+
 
 <hr>
 
@@ -495,13 +553,17 @@ This is, however, a bit more verbose than using `waitForElementToBeRemoved()`. H
 
 ### Instructions:
 
-1. Checkpoint: _Insert checkpoint text here._
+2. Checkpoint: The test below, mimics a user posting a thought with the text content 'I have to buy groceries'. Use `.waitFor()` and a jest assertion to confirm that this thought appears in the DOM. Note: This is not an asynchronous action, but is there for you to practice using `waitFor()`
 
-Hint: _Insert optional but recommended hint text here._
+```js
+  await waitFor(()=> expect(screen.queryByText(some Text)).toBeInTheDocument())
+```
 
-2. Checkpoint: _Insert checkpoint text here._
+3. Checkpoint: In the test below use the `userEvent` object to mimics a user posting a thought with the text content 'I have to call my mom'. Use `waitFor()` to assert that this thought will eventuall be removed from the DOM (remember, thoughts disappear after 15 seconds) .
 
-Hint: _Insert optional but recommended hint text here._
+```js
+await waitFor(()=> expect(screen.queryByText(some Text)).toBeNull())
+```
 
 <hr>
 
@@ -586,13 +648,49 @@ In the code snippet above, we are first checking to see if our component success
 
 ### Instructions:
 
-1. Checkpoint: _Insert checkpoint text here._
+The component below calls an API, collects some data and displays it in the DOM. The format of the returned data is shown below.
 
-Hint: _Insert optional but recommended hint text here._
+```js
+[
+  {
+    name : 'John Doe',
+    occupation: 'Engineer',
+    id : 1
+  },
+  {
+    name : 'Jane Doe',
+    occupation: 'Doctor',
+    id : 2
+  }
+]
+```
 
-2. Checkpoint: _Insert checkpoint text here._
 
-Hint: _Insert optional but recommended hint text here._
+1. Checkpoint: Use Jest to fake an API call. The returned data from your fake call should be in the format shown above 
+
+Hint: Your code should look like the following:
+
+```js
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve( [object1, object2]),
+  })
+);
+
+beforeEach(() => {
+  fetch.mockClear();
+});
+```
+
+2. Checkpoint: In the test below make a mock API call and check to see if the data is correctly. displayed in the DOM. Use assertions to ensure that you have called your API only once with the correct arguments.
+
+Hint: Your code should look like the following:
+
+```js
+// I'll put the rest of the answer over here. As this question is a bit tricky.
+  expect(fetch).toHaveBeenCalledTimes(1);
+  expect(fetch).toHaveBeenCalledWith(url);
+```
 
 <hr>
 
