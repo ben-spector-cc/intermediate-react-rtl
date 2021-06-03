@@ -228,7 +228,7 @@ Hint: Use npm install `package name` --save dev to add the package to your proje
 import 'package-name';
 ```
 
-2. Checkpoint: In the first test of the `myApp.test.js` file use `.getByText()` to extract the header node of the `App` component. Then call the `expect().toHaveText()` assertion to confirm that the header node does indeed contain the text `"Passing Thoughts"`.
+2. Checkpoint: In the first test of the `Thought.test.js` file use `.getByText()` to extract the header node of the `App` component. Then call the `expect().toHaveText()` assertion to confirm that the header node does indeed contain the text `"Passing Thoughts"`.
 
 Hint: Your code should be something like this:
 
@@ -237,7 +237,7 @@ const header = screen.getByText(some text);
 expect(header).toHaveText(some Text);
 ```
 
-3. Checkpoint: In the second test of the `myApp.test.js` file use `.getByRole()` to extract the button node of the `Thought` component. Then use a jest assertion to check if the button is enabled. Use the [docs](https://github.com/testing-library/jest-dom#custom-matchers) to find the appropriate jest assertion!
+3. Checkpoint: In the second test of the `Thought.test.js` file use `.getByRole()` to extract the button node of the `Thought` component. Then use a jest assertion to check if the button is enabled. Use the [docs](https://github.com/testing-library/jest-dom#custom-matchers) to find the appropriate jest assertion!
 
 Hint: Your code should be something like this
 
@@ -328,15 +328,15 @@ Note the `async` and `await` keywords in the example above. Remember that `findB
 
 ### Instructions:
 
-1. Checkpoint: In the first test of the `myApp.test.js` file use the `.queryByText()` method to extract the submit button of the `AddThought()` component. Then assert that the node is present in the DOM using a method from the jest-dom library.
+1. Checkpoint: In the first test of the `Thought.test.js` file use the `.queryByText()` method to extract the submit button of the `AddThought()` component. Then assert that the node is present in the DOM using a method from the jest-dom library.
 
 Hint: Your code should be something like this:
 
 ```js
-const submit = screen.queryByText('some text');
-expect(submit).toBeInTheDocument();
+const node = screen.queryByText('some text');
+expect(node).toBeInTheDocument();
 ```
-2. Checkpoint: The `.queryByText('Hey There')` method in the second test of the `myApp.test.js` file is querying for an element that doesn't exist in the document. Use an assertion from the jest-dom library to confirm that this element is not present in the DOM.
+2. Checkpoint: The `.queryByText('Hey There')` method in the second test of the `Thought.test.js` file is querying for an element that doesn't exist in the document. Use an assertion from the jest-dom library to confirm that this element is not present in the DOM.
 
 Hint: Your code should be something like this:
 
@@ -345,7 +345,7 @@ const node = screen.queryByText(some text);
 expect(node).toBeNull();
 ```
 
-3. Checkpoint: The third test of the `myApp.test.js` file mimics a user posting a thought with the text content 'Oreos are delicious' (we'll cover how you can do this in the next exercise!). Use the `.findByText()` method to grab that node by text and then use a jest-dom matcher to assert that this node will appear in the DOM.
+3. Checkpoint: The third test of the `Thought.test.js` file mimics a user posting a thought with the text content 'Oreos are delicious' (we'll cover how you can do this in the next exercise!). Use the `.findByText()` method to grab that node by text and then use a jest-dom matcher to assert that this node will appear in the DOM.
 
 Hint: Your code should be something like this:
 
@@ -413,7 +413,7 @@ Hint: Use npm install `package name` --save dev to add the package to your proje
 import { name } from package;
 ```
 
-2. Checkpoint: In the first test of the `myApp.test.js` file a user is posting a thought with the text content `'Oreos are delicious'`. Use the `userEvent` object to mimic a user pressing the 'X' button of this `Thought` component and thereby removing it. Then use the appropriate query method and a jest-dom assertion to confirm the thought has been removed from the DOM.
+2. Checkpoint: In the first test of the `Thought.test.js` file a user is posting a thought with the text content `'Oreos are delicious'`. Use the `userEvent` object to mimic a user pressing the 'X' button of this `Thought` component and thereby removing it. Then use the appropriate query method and a jest-dom assertion to confirm the thought has been removed from the DOM.
 
 Hint: Your code should be something like this:
 
@@ -424,7 +424,7 @@ userEvent.click(submit);
 expect(node).toBeNull();
 ```
 
-3. Checkpoint: In the second test of `myApp.test.js` file implement the `userEvent` object to mimic a user posting a thought with the text content `'Did I forget my keys'`. Then use the appropriate query method to confirm that this thought gets added to the DOM.
+3. Checkpoint: In the second test of `Thought.test.js` file implement the `userEvent` object to mimic a user posting a thought with the text content `'Did I forget my keys'`. Then use the appropriate query method to confirm that this thought gets added to the DOM.
 
 Hint: Your code should be something like this:
 
