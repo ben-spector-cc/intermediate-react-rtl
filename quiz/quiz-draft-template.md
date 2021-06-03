@@ -13,17 +13,17 @@ Response: React Testing Library is a library that allows one to test React compo
 
 - That's right!
 
-Response: React testing library is a tool that allows one to check the current state and props passed to a React component.
+Response: React Testing Library is a tool that allows one to check the current state and props passed to a React component.
 
 - Not quite. RTL is a testing framework that allows one to check if a React component is working as intended from the end users perspective. it does not give any information on a component's state. 
 
-Response: React testing library is a tool that allows one to test React components by checking whether the event handlers associated with a component are updating state as intended.
+Response: React Testing Library is a tool that allows one to test React components by checking whether the event handlers associated with a component are updating state as intended.
 
-- Not quite. While React testing library is a tool for testing React components. It does not consider the actual implementation details of the component such as the event handlers associated with it.
+- Not quite. While React Testing Library is a tool for testing React components, it does not consider the actual implementation details of the component such as the event handlers associated with it.
 
 Response: React testing library is a tool that manages routing in your react applications.
 
-- Not quite. React Testing library does not give an app any routing capablitites. It is simply meant as a library to test whether a React component is working as intended.
+- Not quite. React Testing library does not give an app any routing capabilities. It is used to test whether a React component is working as intended from the user's perspective.
 
 <hr>
 
@@ -31,23 +31,23 @@ Response: React testing library is a tool that manages routing in your react app
 ## Assessment 2 (Multiple Choice Template)
 Check out the [content standards](http://curriculum-documentation.codecademy.com/Content-Standards/multiple-choice/) for guidance on multiple choice assessments.
 
-What is the correct command to install React Testing Library and add it as a dependency to your application?
+What is the correct command to install React Testing Library and add it as a developer dependency to your application?
 
 Response: `npm install --save-dev @testing-library/react`
 
-- That's right!
+- That's right! The --save-dev command adds an installed package to the `"devDependency"` array in the **package.json** file. 
 
 Response: `npm install @testing-library/react`
 
-- Not quite. While that command will add React Testing Library to an application, to save it as a dependency in `package.json` the `--save-dev` flag must be included.
+- Not quite. While that command will add React Testing Library to an application, to save it as a dependency in **package.json** the `--save-dev` flag must be included.
 
 Response: `npm install react-testing-library`
 
-- Not quite. React Testing Library is part of the `@testing-library` package.
+- Not quite. React Testing Library is part of the `@testing-library` package. Also, the `--save-dev` flag is missing!
 
 Response: `npm install @testing-library/react-testing-library --save-dev`
 
-- Not quite. While close, the name of the correct package is `@testing-library/react`.
+- Not quite. While the `--save-dev` flag will properly save this as a developer dependency, the name of the correct package is `@testing-library/react`.
 
 <hr>
 
@@ -58,9 +58,9 @@ Check out the [content standards](http://curriculum-documentation.codecademy.com
 Consider the component below:
 
 ```js
-const Header = ()=>{
-    return <h1> Hello friends </h1>
-}
+const Header = () => {
+  return <h1>Hello friends</h1>
+};
 ```
 
 What is the correct code to include this component in a RTL unit test and then print out its contents?
@@ -70,42 +70,43 @@ Response:
 ```js
 
 import { render, screen } from '@testing-library/react';
-import Header from './Header'
+import Header from './Header';
 
-test('Should display content of Header component',()=>{
-    render(<Header/>)
-    screen.debug()
-})
+test('Should display content of Header component', () => {
+  render(<Header/>);
+  screen.debug();
+});
 
 ```
 
-- That's right!
+- That's right! We first need to import `render` and `screen`. Then inside the `test()` we can call `render()` on the `Header` component followed by `screen.debug()` to print out the rendered element.
+
+Response:
+
+```js
+import { screen } from '@testing-library/react';
+import ReactDOM from 'react-dom';
+import Header from './Header';
+
+test('Should display content of Header component', () => {
+    ReactDOM.render(<Header/>);
+    screen.debug();
+});
+
+```
+
+- Not quite. To include a component in a unit test, the `render()` method from React Testing Library should be used, not `ReactDOM.`
 
 Response:
 
 ```js
 import { render, screen } from '@testing-library/react';
-import Header from './Header'
+import Header from './Header';
 
-test('Should display content of Header component',()=>{
-    ReactDOM.render(<Header/>)
-    screen.debug()
-})
-
-```
-
-- Not quite. To include a component in a unit test, the `render()` method does not have to be prefaced with `ReactDOM.`
-
-Response:
-
-```js
-import { render, screen } from '@testing-library/react';
-import Header from './Header'
-
-test('Should display content of Header component',()=>{
-    render(<Header/>)
-    screen.debug(Header)
-})
+test('Should display content of Header component', () => {
+  render();
+  screen.debug(Header);
+});
 
 ```
 
@@ -114,12 +115,12 @@ test('Should display content of Header component',()=>{
 Response:
 
 ```js
-import Header from './Header'
+import Header from './Header';
 
-test('Should display content of Header component',()=>{
-    render(<Header/>)
-    screen.debug(Header)
-})
+test('Should display content of Header component', () => {
+  render(<Header/>);
+  screen.debug();
+});
 
 ```
 
@@ -135,20 +136,21 @@ Check out the [content standards](http://curriculum-documentation.codecademy.com
 Consider the component below:
 
 ```js
-const App = ()=>{
+const App = () => {
     return (
         <div>
             <h1> What is your name? </p>)
-            <label for="male">Enter Name:</label>
+            <label for="name">Enter Name:</label>
             <input id="name">
             <button type = "submit">Submit </button>
         </div>
-})
+   );
+};
 
-export default App
+export default App;
 ```
 
-Fill in the code such that -
+Fill in the code to assert that the header is present in the document and that the button is enabled asynchronously:
 
 - The header node is extracted and assigned to the `header` variable
 - The button node is extracted and assigned to the `button` variable.
@@ -163,60 +165,49 @@ import App from './App';
 
 test('Should display content of Header component',()=>{
     render(<App/>)
-    const header = ______
-    const button = ______
+    const header = __~screen.getByText('What is your name?')~__
+    const button = __~screen.getByRole('button')~__
     // Confirm text of header
-    ______
+    __~expect(header).ToBeInTheDocument()~__
     // Confirm button node present in Document
+    __~expect(button).ToBeEnabled()~__
 })
 
 ```
 
 - Hint : You can use the `screen.getByX` methods to extract DOM nodes.
-- Hint : Remember jest-dom gives you access to addtional jest assertions. E.g. expect(node).ToBeChecked()
+- Hint : You can extract nodes by their roles as well, and not just text content.
+- Hint : Remember jest-dom gives you access to additional jest assertions. You can figure out what they are doing by looking at the method name after the `expect.` prefix  E.g. `expect(checkbox).ToBeChecked()`, asserts that the checkbox is checked.
+- Hint: What is the assertion that allows you to see if a DOM node is active?
 
-Response: 
-```js
-const header = screen.getByText('What is your name?')
-```
+Extra Responses: 
+- expect(header).toBeEnabled();
+- expect(button).toHaveTextContent('What is your name?');
+- screen.query('button');
+- screen.query('What is your name?');
 
-Response: 
-
-```js
-const button = screen.getByRole('button')
-```
-
-Response: 
-
-```js
-expect(header).ToHaveTextContent('What is your name?')
-```
-
-Response: 
-
-```js
-expect(button).ToBeInTheDocument()
-```
 
 <hr>
 
 
-## Assessment 5 (Multiple Choice Template)
+## Assessment 5 (FITC)
 Check out the [content standards](http://curriculum-documentation.codecademy.com/Content-Standards/multiple-choice/) for guidance on multiple choice assessments.
 
-Consider the component below:
+Consider the component below. It’s a simple form that asks users to enter some text:
 
 ```js
-const Form = ()=>{
+const Form = () => {
     return (
         <div>
-            <label for="male">Enter Text:</label>
+            <label for="name">Enter Text:</label>
             <input id="name">
             <button type = "submit">Submit </button>
-        </div>}
+        </div>
+    );
+};
 ```
 
-What is the correct code that mimics a user typing 'Hello' and then pressing the sumbmit button?
+Fill in the code such that the unit test mimics a user typing `“Hello”` and clicking the submit button.
 
 Response: 
 
@@ -224,83 +215,29 @@ Response:
 
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import userEvent '@testing-library/user-event';
+import __~userEvent~__ '@testing-library/user-event';
 
-import Form from './Form'
+import Form from './Form';
 
-test('Should display content of Header component',()=>{
-    render(<Form/>)
-    const input = screen.getByRole('textbox')
-    userEvent.type(input, 'Hello')
-    const button = screen.getByRole('button')
-    userEvent.click(button)
-})
-
-```
-
-- That's right!
-
-Response:
-
-```js
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import userEvent '@testing-library/user-event';
-
-import Form from './Form'
-
-test('Should display content of Header component',()=>{
-    render(<Form/>)
-    const input = screen.getByRole('textbox')
-    userEvent.type('Hello')
-    const button = screen.getByRole('button')
-    userEvent.click(button)
-})
+test('Should display content of Header component', () => {
+    render(<Form/>);
+    const input = screen.getByRole('textbox');
+    ___~userEvent.type(input, 'Hello')~___;
+    const button = screen.getByRole('button');
+    ___~userEvent.click(button)~___;
+});
 
 ```
 
-- Not quite. The first argument of `userEvent.type()` should be the input node.
+Hints :
+- Before mimicking any interactions you have to import a special object from `@testing-library/user-event`.
+- The userEvent object has numerous methods that mimic user interactions. E.g. `userEvent(link).hover()` mimics a user hovering over a link.
+- What would be the correct method that mimics a ‘click’ event?
 
-Response:
-
-```js
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import userEvent '@testing-library/user-event';
-
-import Form from './Form'
-
-test('Should display content of Header component',()=>{
-    render(<Form/>)
-    const input = screen.getByRole('textbox')
-    userEvent.type('Hello')
-    const button = screen.getByRole('button')
-    userEvent.press(button)
-})
-
-```
-
-- Not quite. To press the button the correct method is `.click()`.
-
-Response:
-
-```js
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-
-import Form from './Form'
-
-test('Should display content of Header component',()=>{
-    render(<Form/>)
-    const input = screen.getByRole('textbox')
-    userEvent.type(input, 'Hello')
-    const button = screen.getByRole('button')
-    userEvent.click(button)
-})
-
-```
-
-- Not quite. The `userEvent` object was not imported from `@testing-library/user-event`.
+Extra Options:
+- interact
+- type(input, ‘Hello’)
+- click(button)
 
 <hr>
 
@@ -308,7 +245,7 @@ test('Should display content of Header component',()=>{
 Check out the [content standards](http://curriculum-documentation.codecademy.com/Content-Standards/multiple-choice/) for guidance on multiple choice assessments.
 
 
-What query method variant returns `null`, if it can't find a DOM element.
+Which query method variant returns `null`, if it can't find a DOM element and is useful for determining if an element is NOT present in the DOM?
 
 Response: `.queryByX`
 
@@ -320,14 +257,13 @@ Response: `.findByX`
 
 Response: `.getByX`
 
-- Not quite. The `.getByX` method variant returns `undefined` if it can't find a DOM node.
+- Not quite. The `.getByX` method variant throws an error if it can't find a DOM node.
 
 <hr>
 
+## Assessment 7 (FITC)
 
-
-## Assessment 7 (Multiple Choice Template)
-Check out the [content standards](http://curriculum-documentation.codecademy.com/Content-Standards/multiple-choice/) for guidance on multiple choice assessments.
+Prompt: 
 
 Consider the component below:
 
@@ -335,8 +271,8 @@ Consider the component below:
 import { useState } from 'react';
  
 const App = () => {
- 
   const [text, setText] = useState('Mickey Mouse');
+
   const handleClick = () => {
     setTimeout(() => {
         setText('Donald Duck');
@@ -348,36 +284,13 @@ const App = () => {
       <h1>{text}</h1>
       <button onClick={handleClick}>click me</button>
     </div>
-  )
+  );
 };
  
 export default App;
 ```
 
-What is the correct code you'd use to assert that the text `'Donald Duck'` eventually appears in the DOM?
-
-Response: 
-
-```js
-
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import userEvent '@testing-library/user-event';
-import App from './App'
-
-test('Should show text content of Donald Duck',async ()=>{
-  render(<App/>)
-  const button = screen.getByRole('button');
-  userEvent.click(button);
-  const header = await screen.findByText('Donald Duck');
-  expect(header).toHaveTextContent('Donald Duck');
-})
-
-```
-
-- That's right!
-
-Response:
+Fill in the code such that we properly assert that the text `'Donald Duck'` eventually appears in the DOM?
 
 ```js
 import { render, screen } from '@testing-library/react';
@@ -385,44 +298,26 @@ import '@testing-library/jest-dom';
 import userEvent '@testing-library/user-event';
 import App from './App'
 
-test('Should show text content of Donald Duck',()=>{
+test('Should show text content of Donald Duck', __~async~__ ()=>{
   render(<App/>)
   const button = screen.getByRole('button');
   userEvent.click(button);
-  const header = screen.findByText('Donald Duck');
+  const header = __~await~__ screen__~.findByText~__('Donald Duck');
   expect(header).toHaveTextContent('Donald Duck');
 })
-
 ```
+Hints
+- This keyword must be used before any function definition that contains asynchronous logic.
+- This keyword must be used before any function call that is asynchronous
+- This method from `screen` is used to query for elements that may appear asynchronously.
 
-- Not quite. The `findByX` query methods return a promise and thus the callback function for the unit test should contain the `async/await` keywords.
+Extra options:
+- .queryByText()
+- .getByText()
 
-Response:
+## Assessment 8 (FITC)
 
-```js
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import userEvent '@testing-library/user-event';
-import App from './App'
-
-test('Should show text content of Donald Duck',()=>{
-  render(<App/>)
-  const button = screen.getByRole('button');
-  userEvent.click(button);
-  const header = screen.queryByText('Donald Duck');
-  expect(header).toHaveTextContent('Donald Duck');
-})
-
-```
-
-- Not quite. The `queryByText()` call would return null as it is not asynchronouse and the text `Donald Duck` appears asynchronously.
-
-<hr>
-
-## Assessment 8 (Multiple Choice Template)
-Check out the [content standards](http://curriculum-documentation.codecademy.com/Content-Standards/multiple-choice/) for guidance on multiple choice assessments.
-
-Consider the component below:
+Consider the component below which displays the text `"How is everybody doing?!"` and then removes that text asynchronously after the user clicks on the button:
 
 ```js
 import { useState } from 'react';
@@ -430,80 +325,41 @@ import { useState } from 'react';
 const App = () => {
    const handleClick = () => {
        setTimeout(() => {
-         document.querySelector('h1').remove()
+         document.querySelector('h1').remove();
        }, 250);
    };
    return (
        <div>
-           <h1>How is everybody!!</h1>
+           <h1>How is everybody doing?!</h1>
            <button onClick = {handleClick}>Remove Header</button>
        </div>
    );
 };
 ```
 
-What is the correct code you'd use to assert that the header is removed after a user clicks the button?
-
-Response: 
+Fill in the code to assert that the header is removed asynchronously after a user clicks the button:
 
 ```js
-
-import { waitFor, render, screen } from '@testing-library/react';
+import { __~waitFor~__, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent '@testing-library/user-event';
-import App from './App'
+import App from './App';
 
-test('should remove header display', async () => {
-  render(<App/>)
+test('should remove header display', __~async~__ () => {
+  render(<App/>);
   const button = screen.getByRole('button');
   userEvent.click(button);
-   await waitFor(() => expect(screen.queryByText('How is everybody!!')).toBeNull())
+   __~await~__ __~waitFor(() => expect(screen.queryByText('How is everybody!!')).toBeNull());~__
 });
 
 ```
 
-- That's right!
+Hints:
+- This function can be imported from RTL to wait for asynchronous actions.
+- This keyword must be used before any function definition that contains asynchronous logic.
+- This keyword must be used before any function call that is asynchronous
+- This combination of a function from RTL with a `screen` query method can be used to asynchronously check for the removal of an element.
 
-Response:
-
-```js
-import { waitFor, render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import userEvent '@testing-library/user-event';
-import App from './App'
-
-test('should remove header display', async () => {
-  render(<App/>)
-  const button = screen.getByRole('button');
-  userEvent.click(button);
-  const header = await screen.findByText('How is everybody!!')
-  expect(header).toBeNull())
-});
-
-```
-
-- Not quite. The `findByX` query are used to query for nodes that appear asynchronously. It cannot be used to query for methods that are **removed** asynchronously.
-
-Response:
-
-```js
-import { waitFor, render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import userEvent '@testing-library/user-event';
-import App from './App'
-
-test('should remove header display', () => {
-  render(<App/>)
-  const button = screen.getByRole('button');
-  userEvent.click(button);
-  setTimeout(()=>{
-    expect(screen.queryByText('How is everybody!!')).toBeNull()
-  }), 250)
-});
-
-```
-
-- Not quite. While the assertion in the `setTimeout` callback would be fired after 250ms, setTimeout functions are not used to check whether a node is removed asynchronously.
-
-<hr>
-
+Extra Options:
+- expect(screen.queryByText('How is everybody!!')).toBeNull();
+- expect(screen.getByText('How is everybody doing?!')).toBeNull();
