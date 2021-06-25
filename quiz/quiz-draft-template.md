@@ -130,7 +130,7 @@ test('Should display content of Header component', () => {
 <hr>
 
 
-## Assessment 4 (Multiple Choice Template)
+## Assessment 4 (FITC)
 Check out the [content standards](http://curriculum-documentation.codecademy.com/Content-Standards/multiple-choice/) for guidance on multiple choice assessments.
 
 Consider the component below:
@@ -150,12 +150,7 @@ const App = () => {
 export default App;
 ```
 
-Fill in the code to assert that the header is present in the document and that the button is enabled asynchronously:
-
-- The header node is extracted and assigned to the `header` variable
-- The button node is extracted and assigned to the `button` variable.
-- An assertion is used to confirm the text of the header.
-- An assertion is used to confirm the button is present in the document.
+Fill in the code to assert that the header is present in the document and that the button is enabled:
 
 ```js
 
@@ -193,13 +188,13 @@ Extra Responses:
 ## Assessment 5 (FITC)
 Check out the [content standards](http://curriculum-documentation.codecademy.com/Content-Standards/multiple-choice/) for guidance on multiple choice assessments.
 
-Consider the component below. It’s a simple form that asks users to enter some text:
+Consider the component below. It’s a simple form that asks the user to enter some text:
 
 ```js
 const Form = () => {
     return (
         <div>
-            <label for="name">Enter Text:</label>
+            <label htmlFor="name">Enter Text:</label>
             <input id="name">
             <button type = "submit">Submit </button>
         </div>
@@ -265,7 +260,7 @@ Response: `.getByX`
 
 Prompt: 
 
-Consider the component below:
+Consider the component below. When the user clicks the button the header text is asynchronously replaced with `'Donald Duck'`:
 
 ```js
 import { useState } from 'react';
