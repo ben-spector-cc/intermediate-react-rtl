@@ -8,7 +8,7 @@ _Read the [content standards](http://curriculum-documentation.codecademy.com/Con
 
 Take a look at the react app in the browser. It displays a textbox with a picture of a cat beneath it. 
 
-When users type into the textbox, a copy of the text will appear below the cat image. This is the 'copycat' state of the app. Clicking on the image will make tape appear over the cat's mouth. This is the 'quietcat' state of the app. In this state, when you type into the textbox the text will no longer appear below the cat image. Any existing text below the image will also disappear. You can toggle between the two states by clicking on the cat image.
+When users type into the textbox, a copy of the text will appear below the cat image. This is the `'copycat'` state of the app. Clicking on the image will make tape appear over the cat's mouth. This is the `'quietcat'` state of the app. In this state, when you type into the textbox the text will no longer appear below the cat image. Any existing text below the image will also disappear. You can toggle between the two states by clicking on the cat image.
 
 For this project, you will use the *React Testing Library* to write component tests for this application. Take a moment to familiarize yourself with the app before you get started on the project. 
 
@@ -29,11 +29,11 @@ _Select a stock photo from a website like [pexels.com](https://www.pexels.com/) 
 ### Task #1
 
 - Before we can start writing our tests, we first have to install the necessary modules. In your terminal, use `npm` to install the following packages.
-1. @testing-libary/react
-2. @testing-library/jest-dom
-3. @testing-library/user-event
+1. `@testing-libary/react`
+2. `@testing-library/jest-dom`
+3. `@testing-library/user-event`
 
-Remember to save the packages as a dev dependency by using the `--save-dev` flag.
+Remember to save the packages as a dev dependency by using the `--save-dev` flag. Once this is done, head over to the **package.json** file and look at the devDependencies section to confirm that you have installed all the necessary packages.
 
 ### Hint
 
@@ -47,12 +47,12 @@ npm install --save-dev package1 package2 ...
 
 ### Task #2
 
-- Now that we have all the neccessary packages, we can finally start testing our application. Go to **copycat.test.js**.  We will test our `CopyCat` component here. Make all the neccessary imports listed below.
+- Now that we have all the neccessary packages, we can finally start testing our application. Go to **CopyCat.test.js**.  We will test our `CopyCat` component here. Make all the neccessary imports listed below.
 
-1. `React` from *react*
-2. `render` and `screen` from *@testing-libary/react*
-3. The `userEvent` object from *@testing-library/user-event*
-4. The entire *@testing-library/jest-dom* module
+1. `React` from `react`
+2. `render` and `screen` from `@testing-libary/react`
+3. The `userEvent` object from `@testing-library/user-event`
+4. The entire `@testing-library/jest-dom` module
 
 
 ### Hint
@@ -75,7 +75,7 @@ import @testing-library/jest-dom;
   
   Observe in line 13 that it takes a `name` prop which, if provided, is displayed in the header as 'Copy Cat [name]'. Our first unit test will verify that this component is correctly accepting this `name` prop and rendering it in the DOM. Before we can do that, though, we first have to include this component in our unit test.
 
-  Use RTL's `render` method to render the `CopyCat` component in the unit test. Pass it the following props.
+  Use RTL's `render()` method to render the `CopyCat` component in the unit test. Pass it the following props:
 
   1. `name` : `'Mack'`
   2. `value` : an empty string.
@@ -88,18 +88,15 @@ import @testing-library/jest-dom;
 Your code should look like the following:
 
 ```js
-
 test('test description' ()=>{
     render(
         <Component
             prop1 = {value1}
             prop2 = {value2}
             prop3 = {value3}
-            ...
         />
     )
 })
-
 ```
 
 <hr>
@@ -117,7 +114,7 @@ Use `npm test` to check whether your test passes.
 Your code should look something like this:
 
 ```js
-const node = screen.getByText(some text)
+const node = screen.getByText('some text')
 expect(node).toBeInTheDocument()
 ```
 
@@ -130,20 +127,23 @@ expect(node).toBeInTheDocument()
   The second test in **CopyCat.test.js** will verify this functionality. Your tasks are to do the following.
 
   1. Render the `CopyCat` component in the unit test. The prop values are the same as the first text, except for the `value` prop which will be changed to `'Here is an input'`.
-  2. Extract the input node and verify that the text is present in the textbox. You can use the `.toHaveDisplayValue()` jest matcher to do this.
-  3. Extract the paragraph node and verify that it has the same text as the input value. 
+  2. Extract the input node using the appropriate query method.
+  3. Use the `.toHaveDisplayValue()` jest matcher to verify that the input value displayed in the textbox is the same as the `value` prop passed to the `CopyCat` component.
+  3. Extract the paragraph node using the appropriate query method.
+  5. Use an appropriate jest matcher to verify that the paragraph node has the same text as the input value. 
 
   Use `npm test` to check whether your test passes.
   
-> Note: `.ByText()` methods cannot grab input text values. Just text from nodes with a text property. E.g. paragraphs. So you don't have to worry about your query methods accidentally grabbing the text from the input node.
+> Note: `.byText()` methods cannot grab input text values. Just text from nodes with a text property. E.g. paragraphs. So you don't have to worry about your query methods accidentally grabbing the text from the input node instead of the paragraph.
 
 
 ### Hint
 
-Look at the solution below:
+Your solution should have the following steps:
 
+First render the `CopyCat` component in your test.
 ```js
-test('Should display input text in paragraph when isCopying set to true',()=>{
+test('Should display input text in paragraph when isCopying is set to true',()=>{
   render(
     <CopyCat
     value = {"Here is an input"}
@@ -151,13 +151,12 @@ test('Should display input text in paragraph when isCopying set to true',()=>{
     toggleTape = {()=>{}}
     isCopying = {true}
     />);
-
-  const input = screen.getByRole("textbox");
-  expect(input).toHaveDisplayValue("Here is an input");
-  const par = screen.getByText("Here is an input")
-  expect(par).toBeInTheDocument()
 })
 ```
+
+Once this is done use the `.byRole('textbox')` method to extract the input node and the `.toHaveDisplayValue('input text')` assertion to confirm the input value.
+
+Finally, extract the paragraph node by the `.getByText('some text')` method and confirm that it is present in the DOM with the `.toBeInTheDocument()` assertion.
 
 <hr>
 
@@ -165,19 +164,22 @@ test('Should display input text in paragraph when isCopying set to true',()=>{
 
 - When `isCopying` is set to `false`, the text from the input form will no longer be rendered in the paragraph below the cat image.
 
-  The second test in **CopyCat.test.js** will see that this is functioning properly. Your tasks are to do the following.
+  The third test in **CopyCat.test.js** will see that this is functioning properly. Your tasks are to do the following.
 
   1. Render the `CopyCat` component in the unit test. The prop values are the same as the second text, but set `isCopying` to `false`.
-  2. Extract the input node and verify that the text is present in the textbox. You can use the `.toHaveDisplayValue()` jest matcher to do this.
-  3. Extract the paragraph node and verify that the text is not present. Hint: What is the query variant that returns `null` if a node is not present?
+  2. Extract the input node using the appropriate query method.
+  3. Use the `.toHaveDisplayValue()` jest matcher to verify that the input value displayed in the textbox is the same as the `value` prop passed to the `CopyCat` component.
+  4. Extract the paragraph node using the appropriate query method. Hint: What is the query variant that returns `null` if a node is not present?
+  5. Use an appropriate jest matcher to verify that the paragraph node is `null`.
 
   Use `npm test` to check whether your test passes.
 
 ### Hint
-Look at the solution below:
+Your solution should have the following steps:
 
+First render the `CopyCat` component in your test.
 ```js
-test('Should not display input text in paragraph when isCopying set to false',()=>{
+test('Should not display input text in paragraph when isCopying is set to false',()=>{
   render(
     <CopyCat
     value = {"Here is an input"}
@@ -185,24 +187,25 @@ test('Should not display input text in paragraph when isCopying set to false',()
     toggleTape = {()=>{}}
     isCopying = {false}
     />);
-
-  const input = screen.getByRole("textbox");
-  expect(input).toHaveDisplayValue("Here is an input");
-  const par = screen.queryByText("Here is an input")
-  expect(par).toBeNull()
 })
 ```
+
+Once this is done use the `.byRole('textbox')` method to extract the input node and the `.toHaveDisplayValue('input text')` assertion to confirm the input value.
+
+Finally, extract the paragraph node by the `.queryByText('some text')` method and confirm that it is not present in the DOM with the `.toBeNull()` assertion.
+
 <hr>
 
 ### Task #7
 
 - 
-  Now take a look at the **CopyCatContainer.js** file. It is the container component which contains all the logic for the `CopyCat` component and is responsible for rendering the entire app.
+  Now take a look at the **CopyCatContainer.js** file. It is the container component which contains all the logic for the `CopyCat` component and is responsible for rendering `CopyCat`. More specifically it contains the following which are passed to the `CopyCat` component as props.
+  1. The `input` state which stores the text data of the input field.
+  2. The `handleChange()` function for the input. This sets the `input` value to the value in the textbox.
+  3. The `isCopying` state which is the boolean that determines the state of the app. It is `true` when the app is in the `'copycat'` state and `false` when it's in the `'quietcat'` state.
+  2. The `toggleTape()` function which is passed as the `onClick` handler for the cat image. It flips the boolean value of `isCopying`. This is what swithces the apps state from `'quietcat'` to `'copycat'`.
   
-  Go to the **CopyCatContainer.test.js** file. We will test the `CopyCatContainer` component here. 
-  
-  Before we do that though we have to make the necessary imports. Import all the required modules needed to test the `CopyCatContainer` component.
-
+  Go to the **CopyCatContainer.test.js** file. We will test the `CopyCatContainer` component here. Before we do that though we have to make the necessary imports. Import all the required modules needed to test the `CopyCatContainer` component.
 
 ### Hint
 
@@ -219,23 +222,29 @@ import @testing-library/jest-dom;
 
 ### Task #8
 
-- The first test checks whether the app is correctly rendering the user input below the cat image.
+- The first test in **CopyCatContainer.test.js** should check whether the app is correctly rendering the user input below the cat image whenever the user types.
 
   Write a test that mimics a user typing the text `'Hello World!'` into the textbox. Then check to see if the text is mimicked below the cat image.
 
-  Remember to include the `CopyCatContainer` component in your test with the `render()` method. Note that it does not take in any props. 
-  
-  You can use the `userEvent` object from the `testing-library/user-event` to mimic user interactions.
+  Remember to include the `CopyCatContainer` component in your test with the `render()` method. Note that it does not take in any props. You can use the `userEvent` object from the `testing-library/user-event` to mimic user interactions.
   
   Use `npm test` to check whether your test passes.
 
 ### Hint
+To simulate the user typing into a textbox, you might write something like this:
+
+```js
+const input = screen.getByRole('textbox');
+userEvent.type(input, 'some text');
+```
+
+Then, use the `.getByText()` query method and the `.toBeInTheDocument()` matcher to confirm that the text appears in the document.
 
 <hr>
 
 ### Task #9
 
-  Look at the `CopyCat` app. Type something in the textbox and then click on the cat image such that tape appear over the cat's mouth. Observe that the copied text dissapears. Also notice that there is a slight lag until the tape appears, implying that this is an asynchronous event.
+  Look at the CopyCat app in the browser. Type something in the textbox and then click on the cat image such that tape appear over the cat's mouth. Observe that the copied text dissapears. Also notice that there is a slight lag until the tape appears, implying that this is an asynchronous event.
   
   The second test checks this functionality and whether the user input disappears when the tape appears.
 
@@ -257,15 +266,15 @@ import {screen,render,waitFor} from '@testing-library/react';
 ### Task #10
 
 - 
-  Now that we've made the necessary imports, write a test that checks whether the user input disappears when the user clicks the cat image and sets it to the 'quietcat' state.
+  Now that we've made the necessary imports, write a test that checks whether the user input is first displayed and then disappears when the user clicks the cat image and sets it to the `'quietcat'` state.
 
   You have to do the following:
 
   1. Render the `CopyCatContainer` component in the unit test.
   2. Mimic a user typing the text `'My mouth is shut'` into the textbox.
-  3. Extract the paragraph node and verify that the text is present.
-  4. Extract the image node and mimic a user clicking on it. You can use the [.ByAltText()]() query method to to extract image nodes by their alt text attributes. The `alt` is 'copycat' when there is **no** tape over the cat's mouth.
-  5. Use the `waitFor()` method to verify that the text eventually dissapears when the user switches state from 'copycat' to 'quietcat'.
+  3.Extract the paragraph node and verify that the text is present (since we haven't clicked on the cat yet).
+  4. Extract the image node and mimic a user clicking on it. You can use the [.byAltText()]() query method to to extract image nodes by their `alt` text attributes. The `alt` is `'copycat'` when there is no tape over the cat's mouth.
+  5. Use the `waitFor()` method to verify that the text eventually dissapears when the user switches state from `'copycat'` to `'quietcat'`.
 
   This is an asynchronouse test, so remember to include the `async/await` keywords. Use `npm test` to check whether your test passes.
 
@@ -294,38 +303,19 @@ test('Should remove copied text after removing tape',async ()=>{
 
 ### Task #11
 
-  Look at the `CopyCat` app again. Click on the cat image and set it to the 'quietcat' state. Type something in the textbox and then click on the cat image again such that it reverts back to copycat. Observe that the text in the textbox again appears below the cat image.
-  
-  The third and final test checks this functionality i.e. whether the user input reappear when the tape is removed from the cat's mouth.
-
-  This test is a bit longer that the rest so we will write it in two steps. 
-  
-  The first steps involves the user typing into the text box, clicking on the cat image and setting it to 'quietcat'. Your is to replica this user interaction by doing the following.
-
-  1. Render the `CopyCatContainer` component in the unit test.
-  2. Mimic a user typing the text `'My mouth is shut'` into the textbox.
-  3. Extract the paragraph node and verify that the text is present.
-  4. Extract the image node and mimic a user clicking on it. You can use the [.ByAltText()](https://testing-library.com/docs/queries/byalttext/) query method to to extract image nodes by their alt text attributes. The `alt` is 'copycat' when there is **no** tape over the cat's mouth.
-  5. Use the `waitFor()` method to verify that the text eventually dissapears when the user switches state from 'copycat' to 'quietcat'.
-
-  This is an asynchronouse test, so remember to include the `async/await` keywords. Use `npm test` to check whether your test passes.
-
-### Hint
-
-<hr>
-
-### Task #12
-
 -
-  This test is a bit longer that the rest so we will write it in two steps. 
+  Look at the app again. Click on the cat image and set it to the `'quietcat'` state. Type something in the textbox and then click on the cat image again such that it reverts back to `'copycat'`. Observe that the textbox input reappears below the cat image.
   
-  The first steps involves the user typing into the text box, clicking on the cat image and setting it to 'quietcat'. Your is to replica this user interaction by doing the following.
+  The third and final test checks this functionality i.e. whether the user input reappears when the tape is removed from the cat's mouth. This test is a bit longer than the rest, so we will write it in two steps. 
+  
+  The first steps involves the user typing into the text box, clicking on the cat image and setting it to 'quietcat'. Your task is to replicate this user interaction by doing the following.
 
   1. Render the `CopyCatContainer` component in the unit test.
   2. Extract the image node and mimic a user clicking on it.
-  3. Verify that that the image switched over to the 'quietcat' state. Note you have to use the `.find` query variant of `.ByAltText()` to extract the 'quietcat' image, since this is asynchronous.
+  3. Verify that that the image switched over to the `'quietcat'` state. The `alt` attribute is `'quietcat'` when there is tape over the cat's mouth.
+  > Note: you have to use the `.find` query variant of `.byAltText()` to extract the `'quietcat'` image, since this is asynchronous.
   4. Mimic a user typing the text `'Eventually this will appear'` into the textbox.
-  5. Verify that the text **isn't** copied. Once again, what the query method variant that returns null?
+  5. Verify that the text **isn't** copied. Once again, what is the query method variant that returns `null`?
 
   Remember to include the `async/await` keywords. Use `npm test` to check whether your test passes up to this point.
 
@@ -356,14 +346,14 @@ test('Should display copied text after removing tape',async ()=>{
 
 <hr>
 
-### Task #13
+### Task #12
 
 -
   For the remainder of the test, your task is to do the following. 
 
-  1. Mimic the user clicking on the 'quietcat' image.
-  2. Verify that that the image once again switched over to the 'copycat' state.
-  3. Verify that that the text `'Eventually this will appear'` is rendered in the DOM when the app is set to the 'copycat' state.
+  1. Mimic the user clicking on the `'quietcat'` image.
+  2. Verify that that the image once again switches over to the `'copycat'` state.
+  3. Verify that that the text `'Eventually this will appear'` is rendered in the DOM when the app is set to the `'copycat'` state.
 
   Remember to include the `async/await` keywords. Use `npm test` to check whether your test passes.
 
