@@ -122,26 +122,18 @@ expect(node).toBeInTheDocument()
 
 ### Task #5
 
-- Go back to **CopyCat.js** and take a look at the `isCopying` prop. When `isCopying` is set to `true`, the text from the input form will be rendered in the paragraph below the cat image.
+- Go back to **CopyCat.js** and take a look at the `isCopying` prop. When `isCopying` is set to `true`, the text from the input form will be rendered in the paragraph below the cat image. When `isCopying` is set to `false` the text will no longer be copied into the paragraph.
 
-  The second test in **CopyCat.test.js** will verify this functionality. Your tasks are to do the following.
+  The second test in **CopyCat.test.js** will verify this functionality i.e. whether the text from the input node is copied into the paragraph when `isCopying` is set to true. Before we write it though, we must render the `CopyCat` component with the correct prop values.
 
-  1. Render the `CopyCat` component in the unit test. The prop values are the same as the first text, except for the `value` prop which will be changed to `'Here is an input'`.
-  2. Extract the input node using the appropriate query method.
-  3. Use the `.toHaveDisplayValue()` jest matcher to verify that the input value displayed in the textbox is the same as the `value` prop passed to the `CopyCat` component.
-  3. Extract the paragraph node using the appropriate query method.
-  5. Use an appropriate jest matcher to verify that the paragraph node has the same text as the input value. 
-
-  Use `npm test` to check whether your test passes.
+  Your task is to render the `CopyCat` component in the second unit test. The prop values are the same as the first text, except for the `value` prop which will be changed to `'Here is an input'`. The `value` prop represents the input text value.
   
-> Note: `.byText()` methods cannot grab input text values. Just text from nodes with a text property. E.g. paragraphs. So you don't have to worry about your query methods accidentally grabbing the text from the input node instead of the paragraph.
 
 
 ### Hint
 
-Your solution should have the following steps:
+Look at the solution below:
 
-First render the `CopyCat` component in your test.
 ```js
 test('Should display input text in paragraph when isCopying is set to true',()=>{
   render(
@@ -154,13 +146,36 @@ test('Should display input text in paragraph when isCopying is set to true',()=>
 })
 ```
 
+<hr>
+
+### Task #6
+
+- Now that we've rendered our `CopyCat` component with the correct prop values, we can start writing our second test. Your tasks are to do the following.
+
+  1. Extract the input node using the appropriate query method.
+  2. Use the `.toHaveDisplayValue()` jest matcher to verify that the input value displayed in the textbox is the same as the `value` prop passed to the `CopyCat` component.
+  3. Extract the paragraph node using the appropriate query method.
+  4. Use an appropriate jest matcher to verify that the paragraph node has the same text as the input value. 
+
+  Use `npm test` to check whether your test passes.
+  
+> Note: `.byText()` methods cannot grab input text values. Just text from nodes with a text property. E.g. paragraphs. So you don't have to worry about your query methods accidentally grabbing the text from the input node instead of the paragraph.
+
+
+### Hint
+
+Your solution should have the following steps:
+
+First render the `CopyCat` component with the correct prop values in your test.
+
 Once this is done use the `.byRole('textbox')` method to extract the input node and the `.toHaveDisplayValue('input text')` assertion to confirm the input value.
 
 Finally, extract the paragraph node by the `.getByText('some text')` method and confirm that it is present in the DOM with the `.toBeInTheDocument()` assertion.
 
 <hr>
 
-### Task #6
+
+### Task #7
 
 - When `isCopying` is set to `false`, the text from the input form will no longer be rendered in the paragraph below the cat image.
 
@@ -196,7 +211,7 @@ Finally, extract the paragraph node by the `.queryByText('some text')` method an
 
 <hr>
 
-### Task #7
+### Task #8
 
 - 
   Now take a look at the **CopyCatContainer.js** file. It is the container component which contains all the logic for the `CopyCat` component and is responsible for rendering `CopyCat`. More specifically it contains the following which are passed to the `CopyCat` component as props.
@@ -220,7 +235,7 @@ import @testing-library/jest-dom;
 
 <hr>
 
-### Task #8
+### Task #9
 
 - The first test in **CopyCatContainer.test.js** should check whether the app is correctly rendering the user input below the cat image whenever the user types.
 
@@ -242,7 +257,7 @@ Then, use the `.getByText()` query method and the `.toBeInTheDocument()` matcher
 
 <hr>
 
-### Task #9
+### Task #10
 
   Look at the CopyCat app in the browser. Type something in the textbox and then click on the cat image such that tape appear over the cat's mouth. Observe that the copied text dissapears. Also notice that there is a slight lag until the tape appears, implying that this is an asynchronous event.
   
@@ -263,7 +278,7 @@ import {screen,render,waitFor} from '@testing-library/react';
 
 <hr>
 
-### Task #10
+### Task #11
 
 - 
   Now that we've made the necessary imports, write a test that checks whether the user input is first displayed and then disappears when the user clicks the cat image and sets it to the `'quietcat'` state.
@@ -301,7 +316,7 @@ test('Should remove copied text after removing tape',async ()=>{
 
 <hr>
 
-### Task #11
+### Task #12
 
 -
   Look at the app again. Click on the cat image and set it to the `'quietcat'` state. Type something in the textbox and then click on the cat image again such that it reverts back to `'copycat'`. Observe that the textbox input reappears below the cat image.
@@ -346,7 +361,7 @@ test('Should display copied text after removing tape',async ()=>{
 
 <hr>
 
-### Task #12
+### Task #13
 
 -
   For the remainder of the test, your task is to do the following. 
